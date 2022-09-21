@@ -6,6 +6,8 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 ## Cohort Participants
 
+    - [Weston Norwood](https://github.com/wheninseattle) 🪩
+
 ## Mentors
 
 ## Code of Conduct Contacts
