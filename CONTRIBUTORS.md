@@ -8,7 +8,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
     - [Weston Norwood](https://github.com/wheninseattle) 🪩
     - [Tina Flower](https://github.com/tmflower) 🚣
-    - [Mariah Schock](https://github.com/mariahschock) 🥂
+    - [Mariah Schock](https://github.com/mariahschock) ✨
 
 ## Mentors
 
