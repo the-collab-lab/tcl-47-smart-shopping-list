@@ -16,5 +16,6 @@ Add yourself as a contributor to this project as a Markdown link that links your
 - [Yolanda Haynes](https://github.com/YolandaHaynes) 🍙
 - [Viet Tran](https://github.com/veeteeran) 🎃
 - [Jen Batara](https:///github.com/jendevelops) 🥟
+some stuff
 
 ## Code of Conduct Contacts
