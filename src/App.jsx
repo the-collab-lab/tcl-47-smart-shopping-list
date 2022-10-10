@@ -6,6 +6,8 @@ import { AddItem, Home, Layout, List } from './views';
 import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
 
+import { generateToken } from '@the-collab-lab/shopping-list-utils';
+
 export function App() {
 	const [data, setData] = useState([]);
 	/**
@@ -19,13 +21,17 @@ export function App() {
 	 * to create and join a new list.
 	 */
 	const [listToken, setListToken] = useStateWithStorage(
-		'my test list',
+		null,
 		'tcl-shopping-list-token',
-	);
+	); // Question: listToken, setListToken is not directly linked to 'useState'. How are these variables being destructured?
+
+	const createNewList = () => {
+		const newToken = generateToken();
+		setListToken(newToken);
+	};
 
 	useEffect(() => {
 		if (!listToken) return;
-
 		/**
 		 * streamListItems` takes a `listToken` so it can commuinicate
 		 * with our database; then calls a callback function with
@@ -33,6 +39,7 @@ export function App() {
 		 *
 		 * Refer to `api/firebase.js`.
 		 */
+
 		return streamListItems(listToken, (snapshot) => {
 			/**
 			 * Read the documents in the snapshot and do some work
@@ -51,7 +58,12 @@ export function App() {
 		<Router>
 			<Routes>
 				<Route path="/" element={<Layout />}>
-					<Route index element={<Home />} />
+					<Route
+						index
+						element={
+							<Home listToken={listToken} createNewList={createNewList} />
+						}
+					/>
 					<Route path="/list" element={<List data={data} />} />
 					<Route path="/add-item" element={<AddItem />} />
 				</Route>
