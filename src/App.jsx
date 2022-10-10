@@ -23,7 +23,7 @@ export function App() {
 	const [listToken, setListToken] = useStateWithStorage(
 		null,
 		'tcl-shopping-list-token',
-	); // Question: listToken, setListToken is not directly linked to 'useState'. How are these variables being destructured?
+	);
 
 	const createNewList = () => {
 		const newToken = generateToken();
