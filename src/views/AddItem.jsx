@@ -29,6 +29,8 @@ export function AddItem() {
 			// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and estimate of next purchase date
 			addItem(token, { itemName, daysUntilNextPurchase });
 			alert(`You've added ${itemName} to your shopping list!`);
+			//Clear Form Data
+			setFormData(initialState);
 		}
 	};
 
