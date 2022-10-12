@@ -2,40 +2,37 @@ import { useState } from 'react';
 import { addItem } from '../api/firebase';
 
 export function AddItem() {
+	// sets initial default values in form fields and deconstruct form field variables
 	const initialState = { itemName: '', estimate: '7' };
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
 
+	// for now, we retrieve the token for the test list from local storage;
+	const token = window.localStorage.getItem('tcl-shopping-list-token');
+
+	// updates state based on user input for multiple form fields
 	const formHandler = (e) => {
 		const name = e.target.name;
 		const value = e.target.value;
 		setFormData((formData) => ({ ...formData, [name]: value }));
 	};
 
-	// const handleSubmit = (e) => {
-	// 	e.preventDefault();
-	// 	console.log(formData);
-	// 	let dateToPurchase = Number(estimate);
-	// 	console.log(dateToPurchase)
-	// 	console.log(typeof(dateToPurchase));
-	// 	addDoc("my test list", {itemName, dateToPurchase});
-	// 	alert(`You've added ${itemName} to your shopping list.`);
-	// };
-
+	// if no item name provided, gives user feedback to add item
+	// if item name provided, adds item to user's list and gives user success feedback
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (itemName === '') {
 			alert('Please enter the name of your item.');
 		} else {
-			// changing string to number, as required by addItem function
+			// changes string to number, as required by addItem function
 			const daysUntilNextPurchase = +estimate;
-			console.log(typeof daysUntilNextPurchase);
-			console.log('my test list', { itemName, daysUntilNextPurchase });
-			addItem('my test list', { itemName, daysUntilNextPurchase });
+			// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and estimate of next purchase date
+			addItem(token, { itemName, daysUntilNextPurchase });
 			alert(`You've added ${itemName} to your shopping list!`);
 		}
 	};
 
+	// displays a form with a text field for item name and 3 radio buttons for user to choose next purchase date estimate
 	return (
 		<div>
 			<h1>Add a New Item</h1>
