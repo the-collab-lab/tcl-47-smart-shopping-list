@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { addItem } from '../api/firebase';
 
+// sets initial default values in form fields and deconstruct form field variables
+const initialState = { itemName: '', estimate: '7' };
+
 export function AddItem() {
-	// sets initial default values in form fields and deconstruct form field variables
-	const initialState = { itemName: '', estimate: '7' };
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
 
