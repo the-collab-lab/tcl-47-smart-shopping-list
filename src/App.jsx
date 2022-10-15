@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { AddItem, Home, Layout, List } from './views';
@@ -25,10 +25,10 @@ export function App() {
 		'tcl-shopping-list-token',
 	);
 
-	const createNewList = () => {
+	const createNewList = useCallback(() => {
 		const newToken = generateToken();
 		setListToken(newToken);
-	};
+	}, [setListToken]);
 
 	useEffect(() => {
 		if (!listToken) return;
