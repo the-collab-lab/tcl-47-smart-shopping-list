@@ -39,7 +39,7 @@ export function List({ data }) {
 					</button>
 				)}
 			</form>
-			{/* added || !searchTerm to line 44; if there is no searchTerm, the user will never see the message on line 51 */}
+			{/* added || !searchTerm to line 43; if there is no searchTerm, the user will never see the message on line 51 */}
 			{filteredData.length > 0 || !searchTerm ? (
 				<ul>
 					{filteredData.map((item, i) => (
