@@ -16,9 +16,15 @@ export function List({ data }) {
 		item.name.toLowerCase().includes(searchTerm.toLowerCase()),
 	);
 
+	// default form behavior was causing reload of page when user pushes enter; this prevents that
+	// still feels like a weird user experience when pushing enter and nothing changes/happens...maybe give a simple feedback message, i.e. 'here are your matching items:'
+	const handleSubmit = (e) => {
+		e.preventDefault();
+	};
+
 	return (
 		<>
-			<form>
+			<form onSubmit={handleSubmit}>
 				<label htmlFor="searchTerm">Filter list items</label>
 				<input
 					type="text"
@@ -32,20 +38,17 @@ export function List({ data }) {
 						Reset
 					</button>
 				)}
-				{/* @TODO Pressing 'enter' should not activate reset */}
 			</form>
-			{
-				filteredData.length > 0 ? (
-					<ul>
-						{filteredData.map((item, i) => (
-							<ListItem key={item.name + i} {...item} />
-						))}
-					</ul>
-				) : (
-					<p>No items match your search.</p>
-				)
-				// @TODO Prevent this from displaying at initial load of List view
-			}
+			{/* added || !searchTerm to line 44; if there is no searchTerm, the user will never see the message on line 51 */}
+			{filteredData.length > 0 || !searchTerm ? (
+				<ul>
+					{filteredData.map((item, i) => (
+						<ListItem key={item.name + i} {...item} />
+					))}
+				</ul>
+			) : (
+				<p>No items match your search.</p>
+			)}
 		</>
 	);
 }
