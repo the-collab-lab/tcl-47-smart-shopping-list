@@ -14,20 +14,14 @@ export function Home({ createNewList, listToken }) {
 		setToken((token) => value);
 	};
 
-	// const handleSubmit = (e) => {
-	// 	e.preventDefault();
-	// 	if (itemName === '') {
-	// 		alert('Please enter the name of your item.');
-	// 	} else {
-	// 		// changes string to number, as required by addItem function
-	// 		const daysUntilNextPurchase = +estimate;
-	// 		// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and numDaysInEstimate of next purchase date
-	// 		addItem(token, { itemName, daysUntilNextPurchase });
-	// 		alert(`You've added ${itemName} to your shopping list!`);
-	// 		//Clear Form Data
-	// 		setFormData(initialState);
-	// 	}
-	// };
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (token === listToken) {
+			//navigate to list if token exists
+		} else {
+			//invalid token alert or error message
+		}
+	};
 
 	return (
 		<div>
@@ -38,7 +32,7 @@ export function Home({ createNewList, listToken }) {
 			</div>
 			<div>
 				<h1>Join Existing List</h1>
-				<form>
+				<form onSubmit={handleSubmit}>
 					<label htmlFor="joinList">Enter Token:</label>
 					<input
 						type="text"
