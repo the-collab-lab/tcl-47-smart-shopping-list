@@ -16,8 +16,6 @@ export function List({ data }) {
 		item.name.toLowerCase().includes(searchTerm.toLowerCase()),
 	);
 
-	// default form behavior was causing reload of page when user pushes enter; this prevents that
-	// still feels like a weird user experience when pushing enter and nothing changes/happens...maybe give a simple feedback message, i.e. 'here are your matching items:'
 	const handleSubmit = (e) => {
 		e.preventDefault();
 	};
@@ -39,7 +37,6 @@ export function List({ data }) {
 					</button>
 				)}
 			</form>
-			{/* added || !searchTerm to line 43; if there is no searchTerm, the user will never see the message on line 51 */}
 			{filteredData.length > 0 || !searchTerm ? (
 				<ul>
 					{filteredData.map((item, i) => (
