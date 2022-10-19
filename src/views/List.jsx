@@ -31,7 +31,7 @@ export function List({ data }) {
 					id="searchTerm"
 					placeholder="Start typing here..."
 					onChange={onSearch}
-				></input>
+				/>
 				{searchTerm === '' ? null : (
 					<button onClick={onSearchReset} type="reset">
 						Reset
