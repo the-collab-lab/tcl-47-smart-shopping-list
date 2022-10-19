@@ -20,6 +20,7 @@ export function List({ data }) {
 		e.preventDefault();
 	};
 
+	// TODO - Use navigation similar to in Home.jsx to navigate to home page if no token or token is null
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
