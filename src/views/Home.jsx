@@ -1,8 +1,9 @@
 import './Home.css';
 import { Navigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
+import { verifyExistingList } from '../api/firebase';
 
-export function Home({ createNewList, listToken }) {
+export function Home({ createNewList, listToken, setListToken }) {
 	const [token, setToken] = useState('');
 
 	const handleClick = useCallback(() => {
@@ -14,12 +15,17 @@ export function Home({ createNewList, listToken }) {
 		setToken((token) => value);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (token === listToken) {
+		const formattedToken = token.toLowerCase();
+		const tokenExists = await verifyExistingList(formattedToken);
+
+		if (tokenExists) {
 			//navigate to list if token exists
+			setListToken(formattedToken);
 		} else {
 			//invalid token alert or error message
+			alert('This list does not exist.');
 		}
 	};
 
@@ -33,7 +39,7 @@ export function Home({ createNewList, listToken }) {
 			<div>
 				<h1>Join Existing List</h1>
 				<form onSubmit={handleSubmit}>
-					<label htmlFor="joinList">Enter Token:</label>
+					<label htmlFor="joinList">Enter List Name:</label>
 					<input
 						type="text"
 						name="joinList"
