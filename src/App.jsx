@@ -61,7 +61,11 @@ export function App() {
 					<Route
 						index
 						element={
-							<Home listToken={listToken} createNewList={createNewList} />
+							<Home
+								listToken={listToken}
+								createNewList={createNewList}
+								setListToken={setListToken}
+							/>
 						}
 					/>
 					<Route path="/list" element={<List data={data} />} />

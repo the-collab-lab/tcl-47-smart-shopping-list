@@ -1,6 +1,30 @@
-import { collection, onSnapshot, addDoc } from 'firebase/firestore';
+import {
+	collection,
+	onSnapshot,
+	addDoc,
+	getDocs,
+	query,
+} from 'firebase/firestore';
 import { db } from './config';
 import { getFutureDate } from '../utils';
+
+/**
+ * Accepts user provided token and checks database to verify this token corresponds to an existing list
+ * @param {string} listId The user's list token
+ * @returns {Boolean} Does the list exist (True/False)
+ *
+ * Making queries:
+ * @see: https://firebase.google.com/docs/firestore/query-data/queries
+ *
+ * One time data retrieval vs stream:
+ * @see: https://firebase.google.com/docs/firestore/query-data/get-data
+ */
+export async function verifyExistingList(listId) {
+	const minimumDocs = 1;
+	const collectionQuery = query(collection(db, listId));
+	const snapshot = await getDocs(collectionQuery);
+	return snapshot.docs.length >= minimumDocs;
+}
 
 /**
  * Subscribe to changes on a specific list in the Firestore database (listId), and run a callback (handleSuccess) every time a change happens.
