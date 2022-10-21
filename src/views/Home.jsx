@@ -12,7 +12,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 
 	const formHandler = (e) => {
 		const value = e.target.value;
-		setToken((token) => value);
+		setToken(value);
 	};
 
 	const handleSubmit = async (e) => {
