@@ -32,13 +32,13 @@ export function List({ data }) {
 					placeholder="Start typing here..."
 					onChange={onSearch}
 				/>
-				{searchTerm === '' ? null : (
+				{!!searchTerm && (
 					<button onClick={onSearchReset} type="reset">
 						Reset
 					</button>
 				)}
 			</form>
-			{filteredData.length > 0 || !searchTerm ? (
+			{!!filteredData.length || !searchTerm ? (
 				<ul>
 					{filteredData.map((item, i) => (
 						<ListItem key={item.name + i} {...item} />
