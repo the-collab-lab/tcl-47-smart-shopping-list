@@ -20,10 +20,10 @@ import { getFutureDate } from '../utils';
  * @see: https://firebase.google.com/docs/firestore/query-data/get-data
  */
 export async function verifyExistingList(listId) {
-	const minimumDocs = 1;
 	const collectionQuery = query(collection(db, listId));
 	const snapshot = await getDocs(collectionQuery);
-	return snapshot.docs.length >= minimumDocs;
+
+	return !!snapshot.docs.length;
 }
 
 /**
