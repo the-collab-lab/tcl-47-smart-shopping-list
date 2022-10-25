@@ -3,6 +3,7 @@ import { updateItem } from '../api/firebase';
 
 const currentTime = new Date();
 const numOfSecondsinMin = 60;
+const millisecondsToSeconds = 1000;
 
 export function ListItem({ name, item, listToken }) {
 	const { isChecked, id, totalPurchases, dateLastPurchased } = item;
@@ -10,7 +11,8 @@ export function ListItem({ name, item, listToken }) {
 	if (isChecked) {
 		//check if it's been 24 hours since item was last marked as purchased
 		const timeDiffMinutes =
-			(currentTime.getTime() / 1000 - dateLastPurchased.seconds) /
+			(currentTime.getTime() / millisecondsToSeconds -
+				dateLastPurchased.seconds) /
 			numOfSecondsinMin;
 		const minutesBeforeReset = 1440; // 24 hours x 60 minutes per hour
 		if (timeDiffMinutes >= minutesBeforeReset) {
@@ -40,7 +42,7 @@ export function ListItem({ name, item, listToken }) {
 
 	return (
 		<li className="ListItem">
-			<form action="">
+			<form>
 				<input
 					type="checkbox"
 					name="purchased"
