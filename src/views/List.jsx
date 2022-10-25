@@ -1,7 +1,7 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
 
-export function List({ data }) {
+export function List({ data, listToken }) {
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const onSearch = (e) => {
@@ -41,7 +41,12 @@ export function List({ data }) {
 			{!!filteredData.length || !searchTerm ? (
 				<ul>
 					{filteredData.map((item, i) => (
-						<ListItem key={item.name + i} {...item} />
+						<ListItem
+							key={item.name + i}
+							{...item}
+							item={item}
+							listToken={listToken}
+						/>
 					))}
 				</ul>
 			) : (
