@@ -8,6 +8,7 @@ export function ListItem({ name, item, listToken }) {
 	const { isChecked, id, totalPurchases, dateLastPurchased } = item;
 
 	if (isChecked) {
+		//check if it's been 24 hours since item was marked as purchased
 		const timeDiffMinutes =
 			(currentTime.getTime() / 1000 - dateLastPurchased.seconds) /
 			numOfSecondsinMin;
@@ -39,7 +40,7 @@ export function ListItem({ name, item, listToken }) {
 
 	return (
 		<li className="ListItem">
-			<form action="" onSubmit={handlePurchase}>
+			<form action="">
 				<input
 					type="checkbox"
 					name="purchased"
