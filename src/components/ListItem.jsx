@@ -8,7 +8,7 @@ export function ListItem({ name, item, listToken }) {
 	const { isChecked, id, totalPurchases, dateLastPurchased } = item;
 
 	if (isChecked) {
-		//check if it's been 24 hours since item was marked as purchased
+		//check if it's been 24 hours since item was last marked as purchased
 		const timeDiffMinutes =
 			(currentTime.getTime() / 1000 - dateLastPurchased.seconds) /
 			numOfSecondsinMin;
