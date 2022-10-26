@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
 
 // sets number of days for each future purchase estimate variable
@@ -11,12 +12,12 @@ const numDaysInEstimate = {
 // sets initial default values in form fields and deconstruct form field variables
 const initialState = { itemName: '', estimate: '7' };
 
+// retrieves token from local storage, if one exists
+const token = window.localStorage.getItem('tcl-shopping-list-token');
+
 export function AddItem() {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
-
-	// for now, we retrieve the token for the test list from local storage;
-	const token = window.localStorage.getItem('tcl-shopping-list-token');
 
 	// updates state based on user input for multiple form fields
 	const formHandler = (e) => {
@@ -45,51 +46,66 @@ export function AddItem() {
 	// displays a form with a text field for item name and 3 radio buttons for user to choose next purchase date numDaysInEstimate
 	return (
 		<div>
-			<h1>Add a New Item</h1>
-			<form onSubmit={handleSubmit}>
-				<label htmlFor="itemName">Name:</label>
-				<input
-					type="text"
-					name="itemName"
-					id="itemName"
-					value={itemName}
-					onChange={formHandler}
-				/>
+			{!!token ? (
+				<div>
+					<h1>Add a New Item</h1>
+					<form onSubmit={handleSubmit}>
+						<label htmlFor="itemName">Name:</label>
+						<input
+							type="text"
+							name="itemName"
+							id="itemName"
+							value={itemName}
+							onChange={formHandler}
+						/>
 
-				<fieldset>
-					<legend>How soon will you buy this again?</legend>
-					<label htmlFor="estimate">
-						<input
-							type="radio"
-							value={numDaysInEstimate.soon}
-							id="soon"
-							name="estimate"
-							onChange={formHandler}
-							checked={estimate === numDaysInEstimate.soon}
-						/>
-						<label htmlFor="soon">Soon</label>
-						<input
-							type="radio"
-							value={numDaysInEstimate.kindOfSoon}
-							id="kindOfSoon"
-							name="estimate"
-							onChange={formHandler}
-							checked={estimate === numDaysInEstimate.kindOfSoon}
-						/>
-						<label htmlFor="kindOfSoon">Kind of Soon</label>
-						<input
-							type="radio"
-							value={numDaysInEstimate.notSoon}
-							id="notSoon"
-							name="estimate"
-							onChange={formHandler}
-							checked={estimate === numDaysInEstimate.notSoon}
-						/>
-						<label htmlFor="notSoon">Not Soon</label>
-					</label>
-				</fieldset>
-				<button>Add Item</button>
-			</form>
+						<fieldset>
+							<legend>How soon will you buy this again?</legend>
+							<label htmlFor="estimate">
+								<input
+									type="radio"
+									value={numDaysInEstimate.soon}
+									id="soon"
+									name="estimate"
+									onChange={formHandler}
+									checked={estimate === numDaysInEstimate.soon}
+								/>
+								<label htmlFor="soon">Soon</label>
+								<input
+									type="radio"
+									value={numDaysInEstimate.kindOfSoon}
+									id="kindOfSoon"
+									name="estimate"
+									onChange={formHandler}
+									checked={estimate === numDaysInEstimate.kindOfSoon}
+								/>
+								<label htmlFor="kindOfSoon">Kind of Soon</label>
+								<input
+									type="radio"
+									value={numDaysInEstimate.notSoon}
+									id="notSoon"
+									name="estimate"
+									onChange={formHandler}
+									checked={estimate === numDaysInEstimate.notSoon}
+								/>
+								<label htmlFor="notSoon">Not Soon</label>
+							</label>
+						</fieldset>
+						<button>Add Item</button>
+					</form>
+				</div>
+			) : (
+				<div>
+					<h2>🤽‍♀️ Your enthusiasm is admirable!</h2>
+					<h2>
+						But before you can add an item, you'll need to create or join a
+						list!
+					</h2>
+					<NavLink to="/">
+						<button>Take me there!</button>
+					</NavLink>
+				</div>
+			)}
 		</div>
 	);
 }
