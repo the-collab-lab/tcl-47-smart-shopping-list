@@ -12,12 +12,12 @@ const numDaysInEstimate = {
 // sets initial default values in form fields and deconstruct form field variables
 const initialState = { itemName: '', estimate: '7' };
 
-// retrieves token from local storage, if one exists
-const token = window.localStorage.getItem('tcl-shopping-list-token');
-
 export function AddItem() {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
+
+	// retrieves token from local storage, if one exists
+	const token = window.localStorage.getItem('tcl-shopping-list-token');
 
 	// updates state based on user input for multiple form fields
 	const formHandler = (e) => {
