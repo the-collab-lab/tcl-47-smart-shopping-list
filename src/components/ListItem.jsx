@@ -2,20 +2,17 @@ import './ListItem.css';
 import { updateItem } from '../api/firebase';
 
 const currentTime = new Date();
-const numOfSecondsinMin = 60;
-const millisecondsToSeconds = 1000;
 
 export function ListItem({ name, item, listToken }) {
 	const { isChecked, id, totalPurchases, dateLastPurchased } = item;
 
 	if (isChecked) {
 		//check if it's been 24 hours since item was last marked as purchased
-		const timeDiffMinutes =
-			(currentTime.getTime() / millisecondsToSeconds -
-				dateLastPurchased.seconds) /
-			numOfSecondsinMin;
+		let currentTimeInSeconds = currentTime.getTime() / 1000;
+		let minutesSinceLastPurchased =
+			(currentTimeInSeconds - dateLastPurchased.seconds) / 60;
 		const minutesBeforeReset = 1440; // 24 hours x 60 minutes per hour
-		if (timeDiffMinutes >= minutesBeforeReset) {
+		if (minutesSinceLastPurchased >= minutesBeforeReset) {
 			const itemData = {
 				isChecked: false,
 			};
@@ -25,10 +22,9 @@ export function ListItem({ name, item, listToken }) {
 
 	const handlePurchase = () => {
 		if (isChecked) {
-			const itemData = {
-				isChecked: false,
-			};
-			updateItem(listToken, id, itemData);
+			// TODO: Handle uncheck of purchased. This involves three variables
+			// on the backend: isChecked, dateLastPurchased, and dateNextPurchased.
+			// Potential solution: change dateLast/dateNext to arrays so we have history
 		} else {
 			const updatedPurchaseCount = totalPurchases + 1;
 			const itemData = {
