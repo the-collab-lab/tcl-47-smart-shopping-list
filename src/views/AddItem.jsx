@@ -96,11 +96,11 @@ export function AddItem() {
 				</div>
 			) : (
 				<div>
-					<h2>🤽‍♀️ Your enthusiasm is admirable!</h2>
-					<h2>
+					<p>🤽‍♀️ Your enthusiasm is admirable!</p>
+					<p>
 						But before you can add an item, you'll need to create or join a
 						list!
-					</h2>
+					</p>
 					<NavLink to="/">
 						<button>Take me there!</button>
 					</NavLink>
