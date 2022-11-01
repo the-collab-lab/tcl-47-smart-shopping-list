@@ -11,9 +11,10 @@ const numDaysInEstimate = {
 // sets initial default values in form fields and deconstruct form field variables
 const initialState = { itemName: '', estimate: '7' };
 
-export function AddItem() {
+export function AddItem({ data }) {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
+	const [message, setMessage] = useState(null);
 
 	// for now, we retrieve the token for the test list from local storage;
 	const token = window.localStorage.getItem('tcl-shopping-list-token');
@@ -25,18 +26,25 @@ export function AddItem() {
 		setFormData((formData) => ({ ...formData, [name]: value }));
 	};
 
+	const itemNames = data.map((item) =>
+		item.name.toLowerCase().replace(/[^a-z0-9]/gi, ''),
+	);
 	// if no item name provided, gives user feedback to add item
 	// if item name provided, adds item to user's list and gives user success feedback
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (itemName === '') {
-			alert('Please enter the name of your item.');
+			setMessage('Please enter the name of your item');
+		} else if (
+			itemNames.includes(itemName.toLowerCase().replace(/[^a-z0-9]/gi, ''))
+		) {
+			setMessage(`You already have ${itemName} on your list`);
 		} else {
 			// changes string to number, as required by addItem function
 			const daysUntilNextPurchase = +estimate;
 			// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and numDaysInEstimate of next purchase date
 			addItem(token, { itemName, daysUntilNextPurchase });
-			alert(`You've added ${itemName} to your shopping list!`);
+			setMessage(`You've added ${itemName} to your shopping list!`);
 			//Clear Form Data
 			setFormData(initialState);
 		}
@@ -46,6 +54,7 @@ export function AddItem() {
 	return (
 		<div>
 			<h1>Add a New Item</h1>
+			{message ? <p style={{ color: 'red' }}>{message}</p> : null}
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="itemName">Name:</label>
 				<input
