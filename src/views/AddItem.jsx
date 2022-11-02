@@ -10,7 +10,7 @@ const numDaysInEstimate = {
 };
 
 // sets initial default values in form fields and deconstruct form field variables
-const initialState = { itemName: '', estimate: '7' };
+const initialState = { itemName: '', estimate: numDaysInEstimate.soon };
 
 export function AddItem() {
 	const [formData, setFormData] = useState(initialState);
