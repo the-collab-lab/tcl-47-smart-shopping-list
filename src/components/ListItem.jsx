@@ -1,7 +1,7 @@
 import './ListItem.css';
 import { updateItem } from '../api/firebase';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
-import { getDaysBetweenDates } from '../utils';
+import { getDaysBetweenDates, getFutureDate } from '../utils';
 
 export function ListItem({ name, item, listToken }) {
 	const {
@@ -39,19 +39,22 @@ export function ListItem({ name, item, listToken }) {
 				dateLastPurchased,
 				dateNextPurchased,
 			);
-			console.log(previousEstimate);
+
 			const daysSinceLastTransaction = getDaysBetweenDates(dateLastPurchased);
-			console.log(daysSinceLastTransaction);
+
 			const updatedEstimate = calculateEstimate(
 				previousEstimate,
 				daysSinceLastTransaction,
 				totalPurchases,
 			);
+
+			const updatedNextPurchaseDate = getFutureDate(updatedEstimate);
+
 			const itemData = {
 				isChecked: true,
 				dateLastPurchased: currentTime,
 				totalPurchases: updatedPurchaseCount,
-				// dateNextPurchased: undefined
+				dateNextPurchased: updatedNextPurchaseDate,
 			};
 			updateItem(listToken, id, itemData);
 		}
