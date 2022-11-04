@@ -121,21 +121,19 @@ export async function updateItem(listId, item) {
 		totalPurchases,
 	} = item;
 
-	let currentTime = new Date();
+	let currentDate = new Date();
 
 	if (isChecked) {
 		// TODO: Handle uncheck of purchased. This involves three variables
 		// on the backend: isChecked, dateLastPurchased, and dateNextPurchased.
 		// Potential solution: change dateLast/dateNext to arrays so we have history
 	} else {
-		const updatedPurchaseCount = totalPurchases + 1;
-
 		// If the item has been purchased before, return previous estimate
 		// If this is a first time purchase return difference between the
 		// date of purchase and the date the item was created
 		const previousEstimate = dateLastPurchased
 			? getDaysBetweenDates(dateLastPurchased, dateNextPurchased)
-			: getDaysBetweenDates(dateCreated);
+			: getDaysBetweenDates(dateCreated, dateNextPurchased);
 
 		// If the item has been purchased before, return days since
 		// the last purchase. If this is a first time purchase, return
@@ -144,19 +142,29 @@ export async function updateItem(listId, item) {
 			? getDaysBetweenDates(dateLastPurchased)
 			: getDaysBetweenDates(dateCreated);
 
+		const updatedPurchaseCount = totalPurchases + 1;
+
+		console.log('previousEstimate', previousEstimate);
+		console.log('daysSinceLastTransaction', daysSinceLastTransaction);
+		console.log('updatedPurchaseCount', updatedPurchaseCount);
+
 		const updatedEstimate = calculateEstimate(
 			previousEstimate,
 			daysSinceLastTransaction,
-			totalPurchases,
+			updatedPurchaseCount,
 		);
+
+		console.log('updatedEstimate', updatedEstimate);
 
 		// Determine next date of purchase by adding the estimated days
 		// until next purchase to current date.
 		const updatedNextPurchaseDate = getFutureDate(updatedEstimate);
 
+		console.log('updatedNextPurchaseDate', updatedNextPurchaseDate);
+
 		const updatedItemData = {
 			isChecked: true,
-			dateLastPurchased: currentTime,
+			dateLastPurchased: currentDate,
 			totalPurchases: updatedPurchaseCount,
 			dateNextPurchased: updatedNextPurchaseDate,
 		};
