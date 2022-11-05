@@ -7,8 +7,11 @@ import {
 	doc,
 	updateDoc,
 } from 'firebase/firestore';
+
 import { db } from './config';
-import { getFutureDate } from '../utils';
+
+import { getDaysBetweenDates, getFutureDate } from '../utils';
+import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
 
 /**
  * Accepts user provided token and checks database to verify this token corresponds to an existing list
@@ -88,17 +91,79 @@ export async function addItem(listId, { itemName, daysUntilNextPurchase }) {
 		totalPurchases: 0,
 	});
 }
+/**
+ * Uncheck list item when item
+ * @param {string} listId The id of the list we're adding to.
+ * @param {string} itemId The id of the list item
+ */
+export async function unCheckItem(listId, itemId) {
+	const updatedItemData = {
+		isChecked: false,
+	};
+
+	const docRef = doc(db, listId, itemId);
+	await updateDoc(docRef, updatedItemData);
+}
 
 /**
  * Update list item in Firestore.
  * @param {string} listId The id of the list we're adding to.
- * @param {string} docId The id of the list item document.
- * @param {Object} itemData Data to update in the list item.
+ * @param {Object} item list item data
  * @see https://firebase.google.com/docs/firestore/manage-data/add-data
  */
-export async function updateItem(listId, docId, itemData) {
-	const docRef = doc(db, listId, docId);
-	await updateDoc(docRef, itemData);
+export async function updateItem(listId, item) {
+	const {
+		id,
+		isChecked,
+		dateCreated,
+		dateLastPurchased,
+		dateNextPurchased,
+		totalPurchases,
+	} = item;
+
+	const currentDate = new Date();
+
+	if (isChecked) {
+		// TODO: Handle uncheck of purchased. This involves three variables
+		// on the backend: isChecked, dateLastPurchased, and dateNextPurchased.
+		// Potential solution: change dateLast/dateNext to arrays so we have history
+	} else {
+		// If the item has been purchased before, return previous estimate
+		// If this is a first time purchase return difference between the
+		// date of purchase and the date the item was created
+		const previousEstimate = dateLastPurchased
+			? getDaysBetweenDates(dateLastPurchased, dateNextPurchased)
+			: getDaysBetweenDates(dateCreated, dateNextPurchased);
+
+		// If the item has been purchased before, return days since
+		// the last purchase. If this is a first time purchase, return
+		// days since the item was created
+		const daysSinceLastTransaction = dateLastPurchased
+			? getDaysBetweenDates(dateLastPurchased)
+			: getDaysBetweenDates(dateCreated);
+
+		const updatedPurchaseCount = totalPurchases + 1;
+
+		const updatedEstimate = calculateEstimate(
+			previousEstimate,
+			daysSinceLastTransaction,
+			updatedPurchaseCount,
+		);
+
+		// Determine next date of purchase by adding the estimated days
+		// until next purchase to current date.
+		const updatedNextPurchaseDate = getFutureDate(updatedEstimate);
+
+		const updatedItemData = {
+			isChecked: true,
+			dateLastPurchased: currentDate,
+			totalPurchases: updatedPurchaseCount,
+			dateNextPurchased: updatedNextPurchaseDate,
+		};
+
+		const docRef = doc(db, listId, id);
+		await updateDoc(docRef, updatedItemData);
+	}
 }
 
 export async function deleteItem() {
