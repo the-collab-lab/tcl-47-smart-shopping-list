@@ -121,7 +121,7 @@ export async function updateItem(listId, item) {
 		totalPurchases,
 	} = item;
 
-	let currentDate = new Date();
+	const currentDate = new Date();
 
 	if (isChecked) {
 		// TODO: Handle uncheck of purchased. This involves three variables
@@ -144,23 +144,15 @@ export async function updateItem(listId, item) {
 
 		const updatedPurchaseCount = totalPurchases + 1;
 
-		console.log('previousEstimate', previousEstimate);
-		console.log('daysSinceLastTransaction', daysSinceLastTransaction);
-		console.log('updatedPurchaseCount', updatedPurchaseCount);
-
 		const updatedEstimate = calculateEstimate(
 			previousEstimate,
 			daysSinceLastTransaction,
 			updatedPurchaseCount,
 		);
 
-		console.log('updatedEstimate', updatedEstimate);
-
 		// Determine next date of purchase by adding the estimated days
 		// until next purchase to current date.
 		const updatedNextPurchaseDate = getFutureDate(updatedEstimate);
-
-		console.log('updatedNextPurchaseDate', updatedNextPurchaseDate);
 
 		const updatedItemData = {
 			isChecked: true,
