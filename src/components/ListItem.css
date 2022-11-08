@@ -3,6 +3,7 @@
 	display: flex;
 	flex-direction: row;
 	font-size: 1.2em;
+	justify-content: space-between;
 }
 
 .ListItem-checkbox {
@@ -11,4 +12,19 @@
 
 .ListItem-label {
 	margin-left: 0.2em;
+}
+.Status {
+	color: #ffffff;
+	width: 110px;
+	text-align: center;
+	border-radius: 10px;
+	font-size: 0.75em;
+}
+.Active {
+	background-color: green;
+}
+
+.Inactive {
+	background-color: #ccc;
+	color: black;
 }

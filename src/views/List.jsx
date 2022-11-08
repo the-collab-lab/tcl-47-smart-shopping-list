@@ -5,8 +5,7 @@ import { comparePurchaseUrgency } from '../api/firebase';
 
 export function List({ data, listToken }) {
 	comparePurchaseUrgency(data);
-	// console.log(data)
-
+	console.log(data);
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const onSearch = (e) => {

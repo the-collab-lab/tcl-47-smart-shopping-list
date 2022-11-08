@@ -20,13 +20,16 @@ export function ListItem({ name, item, listToken }) {
 		updateItem(listToken, item);
 	};
 
+	const itemUrgencyCategory = {
+		0: 'Overdue',
+		1: 'Soon',
+		2: 'Kind of Soon',
+		3: 'Not Soon',
+		// 4: 'Inactive'
+	};
+
 	return (
 		<li className="ListItem">
-			{item.purchaseStatus === 'active' ? (
-				<p>{item.urgency}</p>
-			) : (
-				<p>{item.purchaseStatus}</p>
-			)}
 			<form>
 				<input
 					type="checkbox"
@@ -37,6 +40,11 @@ export function ListItem({ name, item, listToken }) {
 				/>
 				<label htmlFor="purchased">{name}</label>
 			</form>
+			<p className={`${item.purchaseStatus} Status`}>
+				{item.purchaseStatus === 'Active'
+					? `${itemUrgencyCategory[item.urgencyCategory]}`
+					: `${item.purchaseStatus}`}
+			</p>
 		</li>
 	);
 }

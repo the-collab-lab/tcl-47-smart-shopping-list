@@ -21,13 +21,17 @@ export function getFutureDate(offset) {
  * @returns {number} The difference between the dates in days
  */
 export function getDaysBetweenDates(olderDate, newerDate) {
-	if (newerDate) {
+	const currentDate = new Date();
+	if (newerDate && olderDate) {
 		return (
 			Math.abs(newerDate.toDate() - olderDate.toDate()) /
 			ONE_DAY_IN_MILLISECONDS
 		);
-	} else {
-		const currentDate = new Date();
+	}
+	if (!newerDate) {
 		return Math.abs(currentDate - olderDate.toDate()) / ONE_DAY_IN_MILLISECONDS;
+	}
+	if (!olderDate) {
+		return (newerDate.toDate() - currentDate) / ONE_DAY_IN_MILLISECONDS;
 	}
 }

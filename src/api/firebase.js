@@ -177,66 +177,71 @@ export async function deleteItem() {
 
 export async function comparePurchaseUrgency(data) {
 	for (let item of data) {
-		if (Math.floor(getDaysBetweenDates(item.dateLastPurchased)) >= 60) {
-			const numDaysPassed = Math.floor(
-				getDaysBetweenDates(item.dateLastPurchased),
-			);
-			item.days = numDaysPassed;
-			item.purchaseStatus = 'inactive';
-			item.urgency = null;
+		const daysSincePurchase = item.dateLastPurchased
+			? Math.floor(getDaysBetweenDates(item.dateLastPurchased))
+			: Math.floor(getDaysBetweenDates(item.dateCreated));
+
+		if (daysSincePurchase >= 60) {
+			item.purchaseStatus = 'Inactive';
 		} else {
-			const numDaysTilPurchase = Math.floor(
-				getDaysBetweenDates(item.dateNextPurchased),
-			);
-			item.purchaseStatus = 'active';
-			item.days = numDaysTilPurchase;
-			if (numDaysTilPurchase <= 7) {
-				item.urgencyCategory = 1;
-				item.urgency = 'soon';
-			} else if (numDaysTilPurchase > 7 && numDaysTilPurchase < 30) {
-				item.urgencyCategory = 2;
-				item.urgency = 'kind of soon';
-			} else if (numDaysTilPurchase >= 30) {
-				item.urgencyCategory = 3;
-				item.urgency = 'not soon';
+			const daysUntilPurchase = item.dateLastPurchased
+				? getDaysBetweenDates(item.dateNextPurchased)
+				: getDaysBetweenDates(undefined, item.dateNextPurchased);
+
+			console.log(`${item.name}: ${daysUntilPurchase}`);
+			item.purchaseStatus = 'Active';
+			item.days = daysUntilPurchase;
+			if (daysUntilPurchase < 0) {
+				item.urgencyCategory = 0; // Overdue
+			} else if (daysUntilPurchase <= 7) {
+				item.urgencyCategory = 1; // Soon
+			} else if (daysUntilPurchase > 7 && daysUntilPurchase < 30) {
+				item.urgencyCategory = 2; // Kind of Soon
+			} else if (daysUntilPurchase >= 30) {
+				item.urgencyCategory = 3; // Not Soon
 			}
+			// console.log(`${daysUntilPurchase}: ${item.urgencyCategory}`)
 		}
 	}
 
-	const sortByPurchaseStatus = (a, b) => {
-		const purchaseStatusA = a.purchaseStatus;
-		const purchaseStatusB = b.purchaseStatus;
-		if (purchaseStatusA < purchaseStatusB) {
-			return -1;
-		}
-		if (purchaseStatusA > purchaseStatusB) {
-			return 1;
-		}
-		return 0;
-	};
+	// const sortByPurchaseStatus = (a, b) => {
+	// 	const purchaseStatusA = a.purchaseStatus;
+	// 	const purchaseStatusB = b.purchaseStatus;
+	// 	if (purchaseStatusA < purchaseStatusB) {
+	// 		return -1;
+	// 	}
+	// 	if (purchaseStatusA > purchaseStatusB) {
+	// 		return 1;
+	// 	}
+	// 	return 0;
+	// };
 
-	const sortByDays = (a, b) => a.days - b.days;
+	// const sortByDays = (a, b) => a.days - b.days;
 
-	const sortByUrgencyCategory = (a, b) => a.urgencyCategory - b.urgencyCategory;
+	// const sortByUrgencyCategory = (a, b) => a.urgencyCategory - b.urgencyCategory;
 
-	const sortByName = (a, b) => {
-		const nameA = a.name.toLowerCase();
-		const nameB = b.name.toLowerCase();
-		if (nameA < nameB) {
-			return -1;
-		}
-		if (nameA > nameB) {
-			return 1;
-		}
-		return 0;
-	};
+	// const sortByName = (a, b) => {
+	// 	const nameA = a.name.toLowerCase();
+	// 	const nameB = b.name.toLowerCase();
+	// 	if (nameA < nameB) {
+	// 		return -1;
+	// 	}
+	// 	if (nameA > nameB) {
+	// 		return 1;
+	// 	}
+	// 	return 0;
+	// };
 
-	data.sort(sortByDays);
-	data.sort(sortByUrgencyCategory);
+	// data.sort(sortByDays);
+	// data.sort(sortByUrgencyCategory);
 	// data.sort(sortByName)
 
-	// data.sort((a,b) =>
-	// 	(a.purchaseStatus.localeCompare(b.purchaseStatus) ||
-	// 	a.urgencyCategory - b.urgencyCategory ||
-	// 	a.name.localeCompare(b.name)))
+	data.sort(
+		(a, b) =>
+			a.purchaseStatus.localeCompare(b.purchaseStatus) ||
+			a.urgencyCategory - b.urgencyCategory ||
+			a.name.localeCompare(b.name),
+	);
+
+	return data;
 }
