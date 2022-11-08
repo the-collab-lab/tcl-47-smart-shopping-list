@@ -1,8 +1,11 @@
 import './ListItem.css';
 import { updateItem, unCheckItem } from '../api/firebase';
 
-export function ListItem({ name, item, listToken }) {
+export function ListItem({ name, item, listToken, urgencyCategory }) {
 	const { isChecked, id, dateLastPurchased } = item;
+
+	const itemUrgency = urgencyCategory[item.urgencyCategory];
+	const urgencyClass = itemUrgency.replace(/\s/g, '');
 
 	if (isChecked) {
 		//check if it's been 24 hours since item was last marked as purchased
@@ -20,14 +23,6 @@ export function ListItem({ name, item, listToken }) {
 		updateItem(listToken, item);
 	};
 
-	const itemUrgencyCategory = {
-		0: 'Overdue',
-		1: 'Soon',
-		2: 'Kind of Soon',
-		3: 'Not Soon',
-		// 4: 'Inactive'
-	};
-
 	return (
 		<li className="ListItem">
 			<form>
@@ -40,11 +35,7 @@ export function ListItem({ name, item, listToken }) {
 				/>
 				<label htmlFor="purchased">{name}</label>
 			</form>
-			<p className={`${item.purchaseStatus} Status`}>
-				{item.purchaseStatus === 'Active'
-					? `${itemUrgencyCategory[item.urgencyCategory]}`
-					: `${item.purchaseStatus}`}
-			</p>
+			<p className={`${urgencyClass} Status`}>{itemUrgency}</p>
 		</li>
 	);
 }

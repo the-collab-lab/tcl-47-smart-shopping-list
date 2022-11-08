@@ -20,8 +20,21 @@
 	border-radius: 10px;
 	font-size: 0.75em;
 }
-.Active {
-	background-color: green;
+
+.Overdue {
+	background-color: #f05945;
+}
+
+.Soon {
+	background-color: #ffa62b;
+}
+
+.KindofSoon {
+	background-color: #595b83;
+}
+
+.NotSoon {
+	background-color: #34626c;
 }
 
 .Inactive {
