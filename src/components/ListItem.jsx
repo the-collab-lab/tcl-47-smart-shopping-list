@@ -22,6 +22,11 @@ export function ListItem({ name, item, listToken }) {
 
 	return (
 		<li className="ListItem">
+			{item.purchaseStatus === 'active' ? (
+				<p>{item.urgency}</p>
+			) : (
+				<p>{item.purchaseStatus}</p>
+			)}
 			<form>
 				<input
 					type="checkbox"

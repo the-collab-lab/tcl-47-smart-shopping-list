@@ -1,8 +1,12 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { comparePurchaseUrgency } from '../api/firebase';
 
 export function List({ data, listToken }) {
+	comparePurchaseUrgency(data);
+	// console.log(data)
+
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const onSearch = (e) => {

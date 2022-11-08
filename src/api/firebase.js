@@ -6,6 +6,7 @@ import {
 	query,
 	doc,
 	updateDoc,
+	where,
 } from 'firebase/firestore';
 
 import { db } from './config';
@@ -172,4 +173,70 @@ export async function deleteItem() {
 	 * to delete an existing item! You'll need to figure out what arguments
 	 * this function must accept!
 	 */
+}
+
+export async function comparePurchaseUrgency(data) {
+	for (let item of data) {
+		if (Math.floor(getDaysBetweenDates(item.dateLastPurchased)) >= 60) {
+			const numDaysPassed = Math.floor(
+				getDaysBetweenDates(item.dateLastPurchased),
+			);
+			item.days = numDaysPassed;
+			item.purchaseStatus = 'inactive';
+			item.urgency = null;
+		} else {
+			const numDaysTilPurchase = Math.floor(
+				getDaysBetweenDates(item.dateNextPurchased),
+			);
+			item.purchaseStatus = 'active';
+			item.days = numDaysTilPurchase;
+			if (numDaysTilPurchase <= 7) {
+				item.urgencyCategory = 1;
+				item.urgency = 'soon';
+			} else if (numDaysTilPurchase > 7 && numDaysTilPurchase < 30) {
+				item.urgencyCategory = 2;
+				item.urgency = 'kind of soon';
+			} else if (numDaysTilPurchase >= 30) {
+				item.urgencyCategory = 3;
+				item.urgency = 'not soon';
+			}
+		}
+	}
+
+	const sortByPurchaseStatus = (a, b) => {
+		const purchaseStatusA = a.purchaseStatus;
+		const purchaseStatusB = b.purchaseStatus;
+		if (purchaseStatusA < purchaseStatusB) {
+			return -1;
+		}
+		if (purchaseStatusA > purchaseStatusB) {
+			return 1;
+		}
+		return 0;
+	};
+
+	const sortByDays = (a, b) => a.days - b.days;
+
+	const sortByUrgencyCategory = (a, b) => a.urgencyCategory - b.urgencyCategory;
+
+	const sortByName = (a, b) => {
+		const nameA = a.name.toLowerCase();
+		const nameB = b.name.toLowerCase();
+		if (nameA < nameB) {
+			return -1;
+		}
+		if (nameA > nameB) {
+			return 1;
+		}
+		return 0;
+	};
+
+	data.sort(sortByDays);
+	data.sort(sortByUrgencyCategory);
+	// data.sort(sortByName)
+
+	// data.sort((a,b) =>
+	// 	(a.purchaseStatus.localeCompare(b.purchaseStatus) ||
+	// 	a.urgencyCategory - b.urgencyCategory ||
+	// 	a.name.localeCompare(b.name)))
 }
