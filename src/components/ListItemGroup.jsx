@@ -10,9 +10,7 @@ export function ListItemGroup({ listItems, listToken, urgencyCategory }) {
 	return (
 		<ul>
 			<hr />
-			<h3 className="Category" on>
-				{groupUrgency}
-			</h3>
+			<h3 className="Category">{groupUrgency}</h3>
 			{listItems.map((item, i) => (
 				<ListItem
 					key={item.name + i}

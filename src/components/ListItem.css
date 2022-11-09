@@ -2,7 +2,7 @@
 	align-items: baseline;
 	display: flex;
 	flex-direction: row;
-	font-size: 1.2em;
+	font-size: 1.3em;
 	justify-content: space-between;
 }
 
@@ -19,22 +19,24 @@
 	text-align: center;
 	border-radius: 10px;
 	font-size: 0.75em;
+	font-weight: 700;
+	font-style: oblique;
 }
 
 .Overdue {
-	background-color: #f05945;
+	background-color: #ee4540;
 }
 
 .Soon {
-	background-color: #ffa62b;
+	background-color: #e2703a;
 }
 
 .KindofSoon {
-	background-color: #595b83;
+	background-color: #07689f;
 }
 
 .NotSoon {
-	background-color: #34626c;
+	background-color: #4e9f3d;
 }
 
 .Inactive {
