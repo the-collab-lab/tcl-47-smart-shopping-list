@@ -219,40 +219,7 @@ export function comparePurchaseUrgency(data) {
 				item.urgencyCategory = 4; // Inactive
 			}
 		}
-		// sortedData[item.urgencyCategory].push(item);
 	}
-
-	// const sortByPurchaseStatus = (a, b) => {
-	// 	const purchaseStatusA = a.purchaseStatus;
-	// 	const purchaseStatusB = b.purchaseStatus;
-	// 	if (purchaseStatusA < purchaseStatusB) {
-	// 		return -1;
-	// 	}
-	// 	if (purchaseStatusA > purchaseStatusB) {
-	// 		return 1;
-	// 	}
-	// 	return 0;
-	// };
-
-	// const sortByDays = (a, b) => a.days - b.days;
-
-	// const sortByUrgencyCategory = (a, b) => a.urgencyCategory - b.urgencyCategory;
-
-	// const sortByName = (a, b) => {
-	// 	const nameA = a.name.toLowerCase();
-	// 	const nameB = b.name.toLowerCase();
-	// 	if (nameA < nameB) {
-	// 		return -1;
-	// 	}
-	// 	if (nameA > nameB) {
-	// 		return 1;
-	// 	}
-	// 	return 0;
-	// };
-
-	// data.sort(sortByDays);
-	// data.sort(sortByUrgencyCategory);
-	// data.sort(sortByName)
 
 	//Sort items, first by purchase status,
 	//then by urgency, and lastly alphabetically.
