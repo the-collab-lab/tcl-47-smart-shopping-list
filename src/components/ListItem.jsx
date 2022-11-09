@@ -21,9 +21,9 @@ export function ListItem({ name, item, listToken }) {
 	};
 
 	const handleDelete = () => {
-		deleteItem(listToken, id);
-		console.log('listId', listToken);
-		console.log('id', id);
+		if (window.confirm('Are you sure you want to delete item?')) {
+			deleteItem(listToken, id);
+		}
 	};
 
 	return (
