@@ -6,7 +6,6 @@ import {
 	query,
 	doc,
 	updateDoc,
-	where,
 } from 'firebase/firestore';
 
 import { db } from './config';
@@ -175,22 +174,39 @@ export async function deleteItem() {
 	 */
 }
 
-export async function comparePurchaseUrgency(data) {
-	for (let item of data) {
-		const daysSincePurchase = item.dateLastPurchased
-			? Math.floor(getDaysBetweenDates(item.dateLastPurchased))
-			: Math.floor(getDaysBetweenDates(item.dateCreated));
+/**
+ * Compare purchase history of list items and sort items by three attributes:
+ * 1) Purchase status, 2) Urgency, and 3) Alphabetically
+ * add a property to each item indicating the urgency of the next purchase
+ * @param {object} data The raw list data to be sorted.
+ */
+export function comparePurchaseUrgency(data) {
+	// Create an empty, nested array for sorted data categories
+	const sortedData = [];
+	for (let i = 0; i < 6; i++) {
+		sortedData.push([]);
+	}
 
+	// Loop through all items and assign urgency based on days until next purchase
+	for (let item of data) {
+		// If the item has been purchased before, return days since last purchase
+		// If the item has never been purchased, return the days since item creation
+		const daysSincePurchase = item.dateLastPurchased
+			? getDaysBetweenDates(item.dateLastPurchased)
+			: getDaysBetweenDates(item.dateCreated);
+
+		// Assign urgency
 		if (daysSincePurchase >= 60) {
 			item.purchaseStatus = 'Inactive';
+			item.urgencyCategory = 4; // Inactive
 		} else {
 			const daysUntilPurchase = item.dateLastPurchased
 				? getDaysBetweenDates(item.dateNextPurchased)
 				: getDaysBetweenDates(undefined, item.dateNextPurchased);
 
-			console.log(`${item.name}: ${daysUntilPurchase}`);
 			item.purchaseStatus = 'Active';
 			item.days = daysUntilPurchase;
+
 			if (daysUntilPurchase < 0) {
 				item.urgencyCategory = 0; // Overdue
 			} else if (daysUntilPurchase <= 7) {
@@ -199,9 +215,11 @@ export async function comparePurchaseUrgency(data) {
 				item.urgencyCategory = 2; // Kind of Soon
 			} else if (daysUntilPurchase >= 30) {
 				item.urgencyCategory = 3; // Not Soon
+			} else {
+				item.urgencyCategory = 4; // Inactive
 			}
-			// console.log(`${daysUntilPurchase}: ${item.urgencyCategory}`)
 		}
+		// sortedData[item.urgencyCategory].push(item);
 	}
 
 	// const sortByPurchaseStatus = (a, b) => {
@@ -236,6 +254,8 @@ export async function comparePurchaseUrgency(data) {
 	// data.sort(sortByUrgencyCategory);
 	// data.sort(sortByName)
 
+	//Sort items, first by purchase status,
+	//then by urgency, and lastly alphabetically.
 	data.sort(
 		(a, b) =>
 			a.purchaseStatus.localeCompare(b.purchaseStatus) ||
@@ -243,5 +263,14 @@ export async function comparePurchaseUrgency(data) {
 			a.name.localeCompare(b.name),
 	);
 
-	return data;
+	// Group items by urgency category
+	data.forEach((item) => {
+		if (item.isChecked) {
+			sortedData[5].push(item);
+		} else {
+			sortedData[item.urgencyCategory].push(item);
+		}
+	});
+
+	return sortedData;
 }
