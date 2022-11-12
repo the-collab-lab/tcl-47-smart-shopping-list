@@ -167,12 +167,7 @@ export async function updateItem(listId, item) {
 	}
 }
 
-export async function deleteItem(listId, id) {
-	const docRef = doc(db, listId, id);
+export async function deleteItem(listId, itemId) {
+	const docRef = doc(db, listId, itemId);
 	await deleteDoc(docRef);
-	/**
-	 * TODO: Fill this out so that it uses the correct Firestore function
-	 * to delete an existing item! You'll need to figure out what arguments
-	 * this function must accept!
-	 */
 }
