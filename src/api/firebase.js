@@ -12,6 +12,7 @@ import { db } from './config';
 
 import { getDaysBetweenDates, getFutureDate } from '../utils';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import { numDaysInEstimate } from '../views/AddItem.jsx';
 
 /**
  * Accepts user provided token and checks database to verify this token corresponds to an existing list
@@ -196,7 +197,7 @@ export function comparePurchaseUrgency(data) {
 			: getDaysBetweenDates(item.dateCreated);
 
 		// Assign urgency
-		if (daysSincePurchase >= 60) {
+		if (daysSincePurchase >= numDaysInEstimate.inactive) {
 			item.purchaseStatus = 'Inactive';
 			item.urgencyCategory = 4; // Inactive
 		} else {
@@ -207,7 +208,7 @@ export function comparePurchaseUrgency(data) {
 			item.purchaseStatus = 'Active';
 			item.days = daysUntilPurchase;
 
-			if (daysUntilPurchase < 0) {
+			if (daysUntilPurchase < numDaysInEstimate.overdue) {
 				item.urgencyCategory = 0; // Overdue
 			} else if (daysUntilPurchase <= 7) {
 				item.urgencyCategory = 1; // Soon
@@ -223,12 +224,20 @@ export function comparePurchaseUrgency(data) {
 
 	//Sort items, first by purchase status,
 	//then by urgency, and lastly alphabetically.
-	data.sort(
-		(a, b) =>
-			a.purchaseStatus.localeCompare(b.purchaseStatus) ||
-			a.urgencyCategory - b.urgencyCategory ||
-			a.name.localeCompare(b.name),
-	);
+
+	const sortByPurchaseStatus = (a, b) =>
+		a.purchaseStatus.localeCompare(b.purchaseStatus);
+	const sortByUrgencyCategory = (a, b) => a.urgencyCategory - b.urgencyCategory;
+	const sortByName = (a, b) => a.name.localeCompare(b.name);
+
+	data.sort(sortByName).sort(sortByUrgencyCategory).sort(sortByPurchaseStatus);
+
+	// data.sort(
+	// 	(a, b) =>
+	// 		a.purchaseStatus.localeCompare(b.purchaseStatus) ||
+	// 		a.urgencyCategory - b.urgencyCategory ||
+	// 		a.name.localeCompare(b.name),
+	// );
 
 	// Group items by urgency category
 	data.forEach((item) => {
