@@ -1,5 +1,5 @@
 import './ListItem.css';
-import { updateItem, unCheckItem } from '../api/firebase';
+import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 
 export function ListItem({ name, item, listToken }) {
 	const { isChecked, id, dateLastPurchased } = item;
@@ -20,18 +20,27 @@ export function ListItem({ name, item, listToken }) {
 		updateItem(listToken, item);
 	};
 
+	const handleDelete = () => {
+		if (window.confirm('Are you sure you want to delete item?')) {
+			deleteItem(listToken, id);
+		}
+	};
+
 	return (
-		<li className="ListItem">
-			<form>
-				<input
-					type="checkbox"
-					name="purchased"
-					id="purchased"
-					checked={isChecked}
-					onChange={handlePurchase}
-				/>
-				<label htmlFor="purchased">{name}</label>
-			</form>
-		</li>
+		<div>
+			<li className="ListItem">
+				<form>
+					<input
+						type="checkbox"
+						name="purchased"
+						id="purchased"
+						checked={isChecked}
+						onChange={handlePurchase}
+					/>
+					<label htmlFor="purchased">{name}</label>
+				</form>
+			</li>
+			<button onClick={handleDelete}>Delete Item</button>
+		</div>
 	);
 }
