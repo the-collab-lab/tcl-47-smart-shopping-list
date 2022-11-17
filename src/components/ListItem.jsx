@@ -5,8 +5,7 @@ import { getDaysBetweenDates } from '../utils';
 export function ListItem({ name, item, listToken, urgencyCategory }) {
 	const { isChecked, id, dateLastPurchased } = item;
 
-	const itemUrgency = urgencyCategory[item.urgencyCategory];
-	const urgencyClass = itemUrgency.replace(/\s/g, '');
+	const urgencyClass = urgencyCategory.replace(/\s/g, '');
 
 	if (isChecked) {
 		// If item was purchased over 1 day ago, uncheck item
@@ -32,7 +31,7 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 				/>
 				<label htmlFor="purchased">{name}</label>
 			</form>
-			<p className={`${urgencyClass} Status`}>{itemUrgency}</p>
+			<p className={`${urgencyClass} Status`}>{urgencyCategory}</p>
 		</li>
 	);
 }

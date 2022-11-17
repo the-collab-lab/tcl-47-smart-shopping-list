@@ -175,9 +175,52 @@ export async function deleteItem() {
 }
 
 /**
- * Compare purchase history of list items and sort items by three attributes:
- * 1) Purchase status, 2) Urgency, and 3) Alphabetically
- * add a property to each item indicating the urgency of the next purchase
+ * Use next purchase date of items to establish the urgency of purchase.
+ * Function returns an index corresponding to itemUrgency categories
+ * @param {object} item Firestore document data
+ */
+export function getItemUrgency(item) {
+	// If item is marked as checked, return purchased category
+	if (item.isChecked) {
+		return 5;
+	}
+
+	// If the item has been purchased before, return days since last purchase
+	// If the item has never been purchased, return the days since item creation
+	const daysSincePurchase = item.dateLastPurchased
+		? getDaysBetweenDates(item.dateLastPurchased)
+		: getDaysBetweenDates(item.dateCreated);
+
+	// Assign urgency
+	// If item was last purchased over 60 days ago, mark as inactive
+	if (daysSincePurchase >= 60) {
+		return 4; // Inactive
+	} else {
+		const daysUntilPurchase = item.dateLastPurchased
+			? getDaysBetweenDates(item.dateNextPurchased)
+			: getDaysBetweenDates(undefined, item.dateNextPurchased);
+		// If there are less than 0 days until purchase, the item is overdue
+		if (daysUntilPurchase < 0) {
+			return 0; // Overdue items
+			// If there are less than 7 days until purchase, the item is due soon
+		} else if (daysUntilPurchase <= 7) {
+			return 1; // Soon items
+			// If there are more than 7 but less than 30 days until purchase, the item is due kind of soon
+		} else if (daysUntilPurchase > 7 && daysUntilPurchase < 30) {
+			return 2; // Kind of Soon items
+			// If there are more than 30 days until purchase, the item is due not soon
+		} else if (daysUntilPurchase >= 30) {
+			return 3; // Not Soon items
+			// All items should be handled by above, but if not, mark item as inactive
+		} else {
+			return 4; // Inactive items
+		}
+	}
+}
+
+/**
+ * Compare purchase history of list items and sort items by
+ * the urgency of next purchase and then alphabetically
  * @param {object} data The raw list data to be sorted.
  */
 export function comparePurchaseUrgency(data) {
@@ -187,56 +230,15 @@ export function comparePurchaseUrgency(data) {
 		sortedData.push([]);
 	}
 
-	// Loop through all items and assign urgency based on days until next purchase
-	for (let item of data) {
-		// If the item has been purchased before, return days since last purchase
-		// If the item has never been purchased, return the days since item creation
-		const daysSincePurchase = item.dateLastPurchased
-			? getDaysBetweenDates(item.dateLastPurchased)
-			: getDaysBetweenDates(item.dateCreated);
-
-		// Assign urgency
-		if (daysSincePurchase >= 60) {
-			item.purchaseStatus = 'Inactive';
-			item.urgencyCategory = 4; // Inactive
-		} else {
-			const daysUntilPurchase = item.dateLastPurchased
-				? getDaysBetweenDates(item.dateNextPurchased)
-				: getDaysBetweenDates(undefined, item.dateNextPurchased);
-
-			item.purchaseStatus = 'Active';
-			item.days = daysUntilPurchase;
-
-			if (daysUntilPurchase < 0) {
-				item.urgencyCategory = 0; // Overdue
-			} else if (daysUntilPurchase <= 7) {
-				item.urgencyCategory = 1; // Soon
-			} else if (daysUntilPurchase > 7 && daysUntilPurchase < 30) {
-				item.urgencyCategory = 2; // Kind of Soon
-			} else if (daysUntilPurchase >= 30) {
-				item.urgencyCategory = 3; // Not Soon
-			} else {
-				item.urgencyCategory = 4; // Inactive
-			}
-		}
-	}
-
-	//Sort items, first by purchase status,
-	//then by urgency, and lastly alphabetically.
+	//Sort items, first by urgency and then alphabetically.
 	data.sort(
 		(a, b) =>
-			a.purchaseStatus.localeCompare(b.purchaseStatus) ||
-			a.urgencyCategory - b.urgencyCategory ||
-			a.name.localeCompare(b.name),
+			getItemUrgency(a) - getItemUrgency(b) || a.name.localeCompare(b.name),
 	);
 
 	// Group items by urgency category
 	data.forEach((item) => {
-		if (item.isChecked) {
-			sortedData[5].push(item);
-		} else {
-			sortedData[item.urgencyCategory].push(item);
-		}
+		sortedData[getItemUrgency(item)].push(item);
 	});
 
 	return sortedData;
