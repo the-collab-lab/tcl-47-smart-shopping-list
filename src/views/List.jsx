@@ -2,15 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api/firebase';
 import { ListItemGroup } from '../components/ListItemGroup';
-
-const itemUrgencyCategory = {
-	0: 'Overdue',
-	1: 'Soon',
-	2: 'Kind of Soon',
-	3: 'Not Soon',
-	4: 'Inactive',
-	5: 'Purchased',
-};
+import { urgencyCategory } from '../utils';
 
 export function List({ data, listToken }) {
 	const sortedData = comparePurchaseUrgency(data);
@@ -62,17 +54,14 @@ export function List({ data, listToken }) {
 						)}
 					</form>
 					{!!filteredData.length || !searchTerm ? (
-						filteredData.map(
-							(category, i) =>
-								category.length > 0 && (
-									<ListItemGroup
-										key={`Category${i}`}
-										listItems={category}
-										listToken={listToken}
-										urgencyCategory={itemUrgencyCategory}
-									/>
-								),
-						)
+						filteredData.map((category, i) => (
+							<ListItemGroup
+								key={`Category${i}`}
+								listItems={category}
+								listToken={listToken}
+								groupUrgency={urgencyCategory[i].label}
+							/>
+						))
 					) : (
 						<p>No items match your search.</p>
 					)}
