@@ -1,8 +1,11 @@
-import { ListItem } from '../components';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { comparePurchaseUrgency } from '../api/firebase';
+import { ListItemGroup } from '../components/ListItemGroup';
+import { urgencyCategory } from '../utils';
 
 export function List({ data, listToken }) {
+	const sortedData = comparePurchaseUrgency(data);
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const onSearch = (e) => {
@@ -13,9 +16,11 @@ export function List({ data, listToken }) {
 		setSearchTerm('');
 	};
 
-	const filteredData = data.filter((item) =>
-		item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-	);
+	const filteredData = sortedData.map((category) => {
+		return category.filter((item) => {
+			return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+		});
+	});
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -49,16 +54,14 @@ export function List({ data, listToken }) {
 						)}
 					</form>
 					{!!filteredData.length || !searchTerm ? (
-						<ul>
-							{filteredData.map((item, i) => (
-								<ListItem
-									key={item.name + i}
-									{...item}
-									item={item}
-									listToken={listToken}
-								/>
-							))}
-						</ul>
+						filteredData.map((category, i) => (
+							<ListItemGroup
+								key={`Category${i}`}
+								listItems={category}
+								listToken={listToken}
+								groupUrgency={urgencyCategory[i].label}
+							/>
+						))
 					) : (
 						<p>No items match your search.</p>
 					)}

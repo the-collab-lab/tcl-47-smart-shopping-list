@@ -13,6 +13,7 @@ import { db } from './config';
 
 import { getDaysBetweenDates, getFutureDate } from '../utils';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
+import { numDaysInEstimate } from '../views/AddItem.jsx';
 
 /**
  * Accepts user provided token and checks database to verify this token corresponds to an existing list
@@ -170,4 +171,75 @@ export async function updateItem(listId, item) {
 export async function deleteItem(listId, itemId) {
 	const docRef = doc(db, listId, itemId);
 	await deleteDoc(docRef);
+}
+
+/**
+ * Use next purchase date of items to establish the urgency of purchase.
+ * Function returns an index corresponding to itemUrgency categories
+ * @param {object} item Firestore document data
+ */
+export function getItemUrgency(item) {
+	// If item is marked as checked, return purchased category
+	if (item.isChecked) {
+		return 5;
+	}
+
+	// If the item has been purchased before, return days since last purchase
+	// If the item has never been purchased, return the days since item creation
+	const daysSincePurchase = item.dateLastPurchased
+		? getDaysBetweenDates(item.dateLastPurchased)
+		: getDaysBetweenDates(item.dateCreated);
+
+	// Assign urgency
+	// If item was last purchased over 60 days ago, mark as inactive
+	if (daysSincePurchase >= 60) {
+		return 4; // Inactive
+	} else {
+		const daysUntilPurchase = item.dateLastPurchased
+			? getDaysBetweenDates(item.dateNextPurchased)
+			: getDaysBetweenDates(undefined, item.dateNextPurchased);
+		// If there are less than 0 days until purchase, the item is overdue
+		if (daysUntilPurchase < 0) {
+			return 0; // Overdue items
+			// If there are less than 7 days until purchase, the item is due soon
+		} else if (daysUntilPurchase <= 7) {
+			return 1; // Soon items
+			// If there are more than 7 but less than 30 days until purchase, the item is due kind of soon
+		} else if (daysUntilPurchase > 7 && daysUntilPurchase < 30) {
+			return 2; // Kind of Soon items
+			// If there are more than 30 days until purchase, the item is due not soon
+		} else if (daysUntilPurchase >= 30) {
+			return 3; // Not Soon items
+			// All items should be handled by above, but if not, mark item as inactive
+		} else {
+			return 4; // Inactive items
+		}
+	}
+}
+
+/**
+ * Compare purchase history of list items and sort items by
+ * the urgency of next purchase and then alphabetically
+ * @param {object} data The raw list data to be sorted.
+ */
+export function comparePurchaseUrgency(data) {
+	// Create an empty, nested array for sorted data categories
+	const sortedData = [];
+	for (let i = 0; i < 6; i++) {
+		sortedData.push([]);
+	}
+
+	//Sort items, first by urgency and then alphabetically.
+
+	const sortByUrgencyCategory = (a, b) => getItemUrgency(a) - getItemUrgency(b);
+	const sortByName = (a, b) => a.name.localeCompare(b.name);
+
+	data.sort(sortByName).sort(sortByUrgencyCategory);
+
+	// Group items by urgency category
+	data.forEach((item) => {
+		sortedData[getItemUrgency(item)].push(item);
+	});
+
+	return sortedData;
 }

@@ -1,17 +1,16 @@
 import './ListItem.css';
 import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
+import { getDaysBetweenDates } from '../utils';
 
-export function ListItem({ name, item, listToken }) {
+export function ListItem({ name, item, listToken, urgencyCategory }) {
 	const { isChecked, id, dateLastPurchased } = item;
 
+	const urgencyClass = urgencyCategory.replace(/\s/g, '');
+
 	if (isChecked) {
-		//check if it's been 24 hours since item was last marked as purchased
-		let currentTime = new Date();
-		let currentTimeInSeconds = currentTime.getTime() / 1000;
-		let minutesSinceLastPurchased =
-			(currentTimeInSeconds - dateLastPurchased.seconds) / 60;
-		const minutesBeforeReset = 1440; // 24 hours x 60 minutes per hour
-		if (minutesSinceLastPurchased >= minutesBeforeReset) {
+		// If item was purchased over 1 day ago, uncheck item
+		const daysSincePurchase = getDaysBetweenDates(dateLastPurchased);
+		if (daysSincePurchase >= 1) {
 			unCheckItem(listToken, id);
 		}
 	}
@@ -39,6 +38,7 @@ export function ListItem({ name, item, listToken }) {
 					/>
 					<label htmlFor="purchased">{name}</label>
 				</form>
+				<p className={`${urgencyClass} Status`}>{urgencyCategory}</p>
 			</li>
 			<button onClick={handleDelete}>Delete Item</button>
 		</div>
