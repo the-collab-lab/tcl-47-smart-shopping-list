@@ -1,6 +1,8 @@
 import { ListItem } from '../components';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { InputLabel, Input, InputAdornment } from '@mui/material';
+import { Search, HighlightOff } from '@mui/icons-material';
 
 export function List({ data, listToken }) {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -34,19 +36,27 @@ export function List({ data, listToken }) {
 			) : (
 				<div>
 					<form onSubmit={handleSubmit}>
-						<label htmlFor="searchTerm">Filter list items</label>
-						<input
-							type="text"
-							value={searchTerm}
+						<InputLabel htmlFor="searchTerm">Filter Items</InputLabel>
+						<Input
+							sx={{ width: 350 }}
 							id="searchTerm"
+							value={searchTerm}
 							placeholder="Start typing here..."
 							onChange={onSearch}
+							className="SearchBar"
+							startAdornment={
+								<InputAdornment position="start">
+									<Search />
+								</InputAdornment>
+							}
+							endAdornment={
+								searchTerm.length ? (
+									<InputAdornment position="end">
+										<HighlightOff onClick={onSearchReset} type="reset" />
+									</InputAdornment>
+								) : null
+							}
 						/>
-						{!!searchTerm && (
-							<button onClick={onSearchReset} type="reset">
-								Reset
-							</button>
-						)}
 					</form>
 					{!!filteredData.length || !searchTerm ? (
 						<ul>

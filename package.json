@@ -6,6 +6,10 @@
 		"npm": "^8.11.0"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.10.5",
+		"@emotion/styled": "^11.10.5",
+		"@mui/icons-material": "^5.10.14",
+		"@mui/material": "^5.10.14",
 		"@the-collab-lab/shopping-list-utils": "^2.0.0",
 		"firebase": "^9.9.0",
 		"react": "^18.2.0",

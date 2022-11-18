@@ -1,3 +1,4 @@
+import { Checkbox } from '@mui/material';
 import './ListItem.css';
 import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 
@@ -30,7 +31,7 @@ export function ListItem({ name, item, listToken }) {
 		<div>
 			<li className="ListItem">
 				<form>
-					<input
+					<Checkbox
 						type="checkbox"
 						name="purchased"
 						id="purchased"
