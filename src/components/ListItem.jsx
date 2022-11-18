@@ -1,5 +1,5 @@
 import './ListItem.css';
-import { updateItem, unCheckItem } from '../api/firebase';
+import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 import { getDaysBetweenDates } from '../utils';
 
 export function ListItem({ name, item, listToken, urgencyCategory }) {
@@ -19,19 +19,28 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 		updateItem(listToken, item);
 	};
 
+	const handleDelete = () => {
+		if (window.confirm('Are you sure you want to delete item?')) {
+			deleteItem(listToken, id);
+		}
+	};
+
 	return (
-		<li className="ListItem">
-			<form>
-				<input
-					type="checkbox"
-					name="purchased"
-					id="purchased"
-					checked={isChecked}
-					onChange={handlePurchase}
-				/>
-				<label htmlFor="purchased">{name}</label>
-			</form>
-			<p className={`${urgencyClass} Status`}>{urgencyCategory}</p>
-		</li>
+		<div>
+			<li className="ListItem">
+				<form>
+					<input
+						type="checkbox"
+						name="purchased"
+						id="purchased"
+						checked={isChecked}
+						onChange={handlePurchase}
+					/>
+					<label htmlFor="purchased">{name}</label>
+				</form>
+				<p className={`${urgencyClass} Status`}>{urgencyCategory}</p>
+			</li>
+			<button onClick={handleDelete}>Delete Item</button>
+		</div>
 	);
 }
