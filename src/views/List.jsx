@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ListItem } from '../components';
+import { comparePurchaseUrgency } from '../api/firebase';
+import { ListItemGroup } from '../components/ListItemGroup';
 import { SearchBar } from '../components';
+import { urgencyCategory } from '../utils';
 
 export function List({ data, listToken }) {
+	const sortedData = comparePurchaseUrgency(data);
 	const [searchTerm, setSearchTerm] = useState('');
 
-	const filteredData = data.filter((item) =>
-		item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-	);
+	const filteredData = sortedData.map((category) => {
+		return category.filter((item) => {
+			return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+		});
+	});
 
 	// TODO - Use navigation similar to in Home.jsx to navigate to home page if no token or token is null
 	return (
@@ -24,16 +29,14 @@ export function List({ data, listToken }) {
 				<div>
 					<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 					{!!filteredData.length || !searchTerm ? (
-						<ul>
-							{filteredData.map((item, i) => (
-								<ListItem
-									key={item.name + i}
-									{...item}
-									item={item}
-									listToken={listToken}
-								/>
-							))}
-						</ul>
+						filteredData.map((category, i) => (
+							<ListItemGroup
+								key={`Category${i}`}
+								listItems={category}
+								listToken={listToken}
+								groupUrgency={urgencyCategory[i].label}
+							/>
+						))
 					) : (
 						<p>No items match your search.</p>
 					)}

@@ -3,10 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
 
 // sets number of days for each future purchase estimate variable
-const numDaysInEstimate = {
+export const numDaysInEstimate = {
 	soon: '7',
 	kindOfSoon: '14',
 	notSoon: '30',
+	inactive: '60',
+	overdue: '0',
 };
 
 // sets initial default values in form fields and deconstruct form field variables
@@ -57,7 +59,7 @@ export function AddItem({ data }) {
 			{!!token ? (
 				<div>
 					<h1>Add a New Item</h1>
-          {message ? <p style={{ color: 'red' }}>{message}</p> : null}
+					{message ? <p style={{ color: 'red' }}>{message}</p> : null}
 					<form onSubmit={handleSubmit}>
 						<label htmlFor="itemName">Name:</label>
 						<input
