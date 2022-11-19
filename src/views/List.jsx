@@ -1,27 +1,14 @@
-import { ListItem } from '../components';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { InputLabel, Input, InputAdornment } from '@mui/material';
-import { Search, HighlightOff } from '@mui/icons-material';
+import { ListItem } from '../components';
+import { SearchBar } from '../components';
 
 export function List({ data, listToken }) {
 	const [searchTerm, setSearchTerm] = useState('');
 
-	const onSearch = (e) => {
-		setSearchTerm(e.target.value);
-	};
-
-	const onSearchReset = () => {
-		setSearchTerm('');
-	};
-
 	const filteredData = data.filter((item) =>
 		item.name.toLowerCase().includes(searchTerm.toLowerCase()),
 	);
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-	};
 
 	// TODO - Use navigation similar to in Home.jsx to navigate to home page if no token or token is null
 	return (
@@ -35,29 +22,7 @@ export function List({ data, listToken }) {
 				</div>
 			) : (
 				<div>
-					<form onSubmit={handleSubmit}>
-						<InputLabel htmlFor="searchTerm">Filter Items</InputLabel>
-						<Input
-							sx={{ width: 350 }}
-							id="searchTerm"
-							value={searchTerm}
-							placeholder="Start typing here..."
-							onChange={onSearch}
-							className="SearchBar"
-							startAdornment={
-								<InputAdornment position="start">
-									<Search />
-								</InputAdornment>
-							}
-							endAdornment={
-								searchTerm.length ? (
-									<InputAdornment position="end">
-										<HighlightOff onClick={onSearchReset} type="reset" />
-									</InputAdornment>
-								) : null
-							}
-						/>
-					</form>
+					<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 					{!!filteredData.length || !searchTerm ? (
 						<ul>
 							{filteredData.map((item, i) => (
