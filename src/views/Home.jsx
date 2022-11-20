@@ -2,6 +2,7 @@ import './Home.css';
 import { Navigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import { verifyExistingList } from '../api/firebase';
+import { Button, TextField } from '@mui/material';
 
 export function Home({ createNewList, listToken, setListToken }) {
 	const [token, setToken] = useState('');
@@ -30,24 +31,31 @@ export function Home({ createNewList, listToken, setListToken }) {
 	};
 
 	return (
-		<div>
+		<div className="container">
 			<div className="Home">
 				{listToken && <Navigate to={'/List'} replace={true} />}
-				<p>Welcome to your smart shopping list!</p>
-				<button onClick={handleClick}>Create New List</button>
+				<p className="welcome">Welcome to your smart shopping list!</p>
+				<Button variant="contained" onClick={handleClick}>
+					Create New List
+				</Button>
 			</div>
-			<div>
-				<h1>Join Existing List</h1>
+			<div className="Home">
+				<p className="welcome">Join Existing List</p>
 				<form onSubmit={handleSubmit}>
-					<label htmlFor="joinList">Enter List Name:</label>
-					<input
+					<TextField
+						id="outlined-basic joinList"
+						label="Enter List Name"
+						variant="outlined"
+						size="small"
+						sx={{ width: 250 }}
 						type="text"
 						name="joinList"
-						id="joinList"
 						value={token}
 						onChange={formHandler}
 					/>
-					<button>Join List</button>
+					<Button variant="contained" onClick={handleSubmit}>
+						Join List
+					</Button>
 				</form>
 			</div>
 		</div>
