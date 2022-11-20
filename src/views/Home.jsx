@@ -1,4 +1,5 @@
 import './Home.css';
+import HomeIMG from '../assets/home-Copy.png';
 import { Navigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import { verifyExistingList } from '../api/firebase';
@@ -16,6 +17,10 @@ export function Home({ createNewList, listToken, setListToken }) {
 		setToken(value);
 	};
 
+	const resetForm = () => {
+		const value = '';
+		setToken(value);
+	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const formattedToken = token.toLowerCase();
@@ -41,22 +46,30 @@ export function Home({ createNewList, listToken, setListToken }) {
 			</div>
 			<div className="Home">
 				<p className="welcome">Join Existing List</p>
-				<form onSubmit={handleSubmit}>
+				<form onSubmit={handleSubmit} id="joinList">
 					<TextField
 						id="outlined-basic joinList"
 						label="Enter List Name"
 						variant="outlined"
 						size="small"
-						sx={{ width: 250 }}
+						sx={{ width: 300 }}
 						type="text"
 						name="joinList"
 						value={token}
 						onChange={formHandler}
 					/>
-					<Button variant="contained" onClick={handleSubmit}>
-						Join List
-					</Button>
+					<div className="actions">
+						<Button variant="contained" onClick={handleSubmit}>
+							Join List
+						</Button>
+						<Button variant="contained" type="reset" onClick={resetForm}>
+							Cancel
+						</Button>
+					</div>
 				</form>
+			</div>
+			<div className="homeImages">
+				<img src={HomeIMG} alt="honeydew" id="homeImg" />
 			</div>
 		</div>
 	);
