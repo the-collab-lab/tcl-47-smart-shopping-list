@@ -52,7 +52,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 						label="Enter List Name"
 						variant="outlined"
 						size="small"
-						sx={{ width: 300 }}
+						sx={{ width: 400 }}
 						type="text"
 						name="joinList"
 						value={token}
