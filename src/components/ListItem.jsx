@@ -1,3 +1,4 @@
+import { Checkbox } from '@mui/material';
 import './ListItem.css';
 import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 import { getDaysBetweenDates } from '../utils';
@@ -29,7 +30,7 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 		<div>
 			<li className="ListItem">
 				<form>
-					<input
+					<Checkbox
 						type="checkbox"
 						name="purchased"
 						id="purchased"

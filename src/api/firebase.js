@@ -13,7 +13,6 @@ import { db } from './config';
 
 import { getDaysBetweenDates, getFutureDate } from '../utils';
 import { calculateEstimate } from '@the-collab-lab/shopping-list-utils';
-import { numDaysInEstimate } from '../views/AddItem.jsx';
 
 /**
  * Accepts user provided token and checks database to verify this token corresponds to an existing list

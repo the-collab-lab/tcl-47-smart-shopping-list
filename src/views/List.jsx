@@ -2,29 +2,18 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { comparePurchaseUrgency } from '../api/firebase';
 import { ListItemGroup } from '../components/ListItemGroup';
+import { SearchBar } from '../components';
 import { urgencyCategory } from '../utils';
 
 export function List({ data, listToken }) {
 	const sortedData = comparePurchaseUrgency(data);
 	const [searchTerm, setSearchTerm] = useState('');
 
-	const onSearch = (e) => {
-		setSearchTerm(e.target.value);
-	};
-
-	const onSearchReset = () => {
-		setSearchTerm('');
-	};
-
 	const filteredData = sortedData.map((category) => {
 		return category.filter((item) => {
 			return item.name.toLowerCase().includes(searchTerm.toLowerCase());
 		});
 	});
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-	};
 
 	// TODO - Use navigation similar to in Home.jsx to navigate to home page if no token or token is null
 	return (
@@ -38,21 +27,7 @@ export function List({ data, listToken }) {
 				</div>
 			) : (
 				<div>
-					<form onSubmit={handleSubmit}>
-						<label htmlFor="searchTerm">Filter list items</label>
-						<input
-							type="text"
-							value={searchTerm}
-							id="searchTerm"
-							placeholder="Start typing here..."
-							onChange={onSearch}
-						/>
-						{!!searchTerm && (
-							<button onClick={onSearchReset} type="reset">
-								Reset
-							</button>
-						)}
-					</form>
+					<SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 					{!!filteredData.length || !searchTerm ? (
 						filteredData.map((category, i) => (
 							<ListItemGroup
