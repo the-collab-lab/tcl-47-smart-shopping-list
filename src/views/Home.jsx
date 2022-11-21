@@ -52,7 +52,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 						label="Enter List Name"
 						variant="outlined"
 						size="small"
-						sx={{ width: 400 }}
+						sx={{ width: 360 }}
 						type="text"
 						name="joinList"
 						value={token}
@@ -60,7 +60,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 					/>
 					<div className="actions">
 						<Button variant="contained" onClick={handleSubmit}>
-							Join List
+							Join
 						</Button>
 						<Button variant="contained" type="reset" onClick={resetForm}>
 							Cancel
