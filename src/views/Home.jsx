@@ -62,7 +62,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 						<Button variant="contained" onClick={handleSubmit}>
 							Join
 						</Button>
-						<Button variant="contained" type="reset" onClick={resetForm}>
+						<Button variant="outlined" type="reset" onClick={resetForm}>
 							Cancel
 						</Button>
 					</div>
