@@ -15,28 +15,12 @@
 	justify-content: center;
 	align-items: center;
 }
-.container {
-	margin: 10px;
-}
-#joinList {
-	padding: 10px 10px 8px 10px;
-	box-shadow: 3px 1px 5px 1px rgba(211, 211, 211, 0.75);
-	-webkit-box-shadow: 3px 1px 5px 1px rgba(211, 211, 211, 0.75);
-	-moz-box-shadow: 3px 1px 5px 1px rgba(211, 211, 211, 0.75);
-	border-radius: 2px;
-}
-.welcome {
-	text-transform: uppercase;
-	font-weight: bold;
-	text-shadow: rgba(0, 0, 0, 0.15) 0 1.5px;
-	margin: 15px 0;
-}
 .actions {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
-	margin: 10px 20px;
+	margin-bottom: 5px;
 	padding: 10px 0;
 }
 .homeImages {
@@ -44,10 +28,6 @@
 	margin: 10px 0;
 }
 #homeImg {
-	height: 55vh;
 	width: 100%;
 	margin: 0;
-}
-
-@media screen and (max-width: 430px) {
 }

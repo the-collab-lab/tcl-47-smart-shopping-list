@@ -1,9 +1,9 @@
 import './Home.css';
-import HomeIMG from '../assets/home-Copy.png';
+import HomeIMG from '../assets/home.png';
 import { Navigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import { verifyExistingList } from '../api/firebase';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography, Paper } from '@mui/material';
 
 export function Home({ createNewList, listToken, setListToken }) {
 	const [token, setToken] = useState('');
@@ -17,10 +17,6 @@ export function Home({ createNewList, listToken, setListToken }) {
 		setToken(value);
 	};
 
-	const resetForm = () => {
-		const value = '';
-		setToken(value);
-	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const formattedToken = token.toLowerCase();
@@ -39,35 +35,84 @@ export function Home({ createNewList, listToken, setListToken }) {
 		<div className="container">
 			<div className="Home">
 				{listToken && <Navigate to={'/List'} replace={true} />}
-				<p className="welcome">Welcome to your smart shopping list!</p>
-				<Button variant="contained" onClick={handleClick}>
-					Create New List
-				</Button>
+				<Typography
+					variant="h4"
+					sx={{
+						fontWeight: 'bold',
+						textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
+						mt: 2,
+					}}
+				>
+					Welcome to HoneyDo,
+				</Typography>
+				<Typography
+					variant="h4"
+					sx={{
+						fontWeight: 'bold',
+						textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
+						mb: 3,
+					}}
+				>
+					Your Smart Shopping List!
+				</Typography>
 			</div>
-			<div className="Home">
-				<p className="welcome">Join Existing List</p>
-				<form onSubmit={handleSubmit} id="joinList">
-					<TextField
-						id="outlined-basic joinList"
-						label="Enter List Name"
-						variant="outlined"
-						size="small"
-						sx={{ width: 360 }}
-						type="text"
-						name="joinList"
-						value={token}
-						onChange={formHandler}
-					/>
-					<div className="actions">
-						<Button variant="contained" onClick={handleSubmit}>
-							Join
-						</Button>
-						<Button variant="outlined" type="reset" onClick={resetForm}>
-							Cancel
-						</Button>
-					</div>
-				</form>
-			</div>
+			<Paper sx={{ px: 1.75 }} elevation={3}>
+				<div className="Home">
+					<Typography
+						variant="h5"
+						sx={{
+							fontWeight: 'bold',
+							textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
+							mt: 2,
+							mb: 1.45,
+						}}
+					>
+						Create New List
+					</Typography>
+					<Button variant="contained" onClick={handleClick}>
+						Create
+					</Button>
+					<Typography
+						variant="subtitle1"
+						sx={{
+							fontWeight: 'bold',
+							textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
+							mt: 1.5,
+							mb: 1,
+						}}
+					>
+						OR
+					</Typography>
+					<Typography
+						variant="h5"
+						sx={{
+							fontWeight: 'bold',
+							textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
+							mb: 2,
+						}}
+					>
+						Join Existing List
+					</Typography>
+					<form onSubmit={handleSubmit}>
+						<TextField
+							id="outlined-basic joinList"
+							label="List Name..."
+							variant="outlined"
+							size="small"
+							sx={{ width: 360 }}
+							type="text"
+							name="joinList"
+							value={token}
+							onChange={formHandler}
+						/>
+						<div className="actions">
+							<Button variant="contained" onClick={handleSubmit}>
+								Join
+							</Button>
+						</div>
+					</form>
+				</div>
+			</Paper>
 			<div className="homeImages">
 				<img src={HomeIMG} alt="honeydew" id="homeImg" />
 			</div>
