@@ -41,19 +41,10 @@ export function Home({ createNewList, listToken, setListToken }) {
 						fontWeight: 'bold',
 						textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
 						mt: 2,
-					}}
-				>
-					Welcome to HoneyDo,
-				</Typography>
-				<Typography
-					variant="h4"
-					sx={{
-						fontWeight: 'bold',
-						textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
 						mb: 3,
 					}}
 				>
-					Your Smart Shopping List!
+					Welcome to Your Smart Shopping List!
 				</Typography>
 			</div>
 			<Paper sx={{ py: 0.5, px: 1.75, width: 400 }} elevation={3}>
