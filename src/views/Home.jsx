@@ -56,7 +56,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 					Your Smart Shopping List!
 				</Typography>
 			</div>
-			<Paper sx={{ px: 1.75 }} elevation={3}>
+			<Paper sx={{ py: 0.5, px: 1.75 }} elevation={3}>
 				<div className="Home">
 					<Typography
 						variant="h5"
