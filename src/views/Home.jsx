@@ -63,8 +63,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 						sx={{
 							fontWeight: 'bold',
 							textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
-							mt: 2,
-							mb: 1.45,
+							my: 1,
 						}}
 					>
 						Create New List
@@ -78,7 +77,6 @@ export function Home({ createNewList, listToken, setListToken }) {
 							fontWeight: 'bold',
 							textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
 							mt: 1.5,
-							mb: 1,
 						}}
 					>
 						OR
@@ -88,7 +86,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 						sx={{
 							fontWeight: 'bold',
 							textShadow: 'rgba(0, 0, 0, 0.15) 0 1.5px',
-							mb: 2,
+							my: 1,
 						}}
 					>
 						Join Existing List
