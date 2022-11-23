@@ -1,4 +1,5 @@
-import { Checkbox } from '@mui/material';
+import { Checkbox, Typography, TextField, IconButton } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 import './ListItem.css';
 import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 import { getDaysBetweenDates } from '../utils';
@@ -27,21 +28,24 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 	};
 
 	return (
-		<div>
+		<div className="ListItemContainer">
 			<li className="ListItem">
 				<form>
-					<Checkbox
-						type="checkbox"
-						name="purchased"
-						id="purchased"
-						checked={isChecked}
-						onChange={handlePurchase}
-					/>
-					<label htmlFor="purchased">{name}</label>
+					<Typography variant="h4">
+						<Checkbox
+							type="checkbox"
+							name="purchased"
+							id="purchased"
+							checked={isChecked}
+							onChange={handlePurchase}
+						/>
+						<label htmlFor="purchased">{name}</label>
+					</Typography>
 				</form>
-				<p className={`${urgencyClass} Status`}>{urgencyCategory}</p>
 			</li>
-			<button onClick={handleDelete}>Delete Item</button>
+			<IconButton onClick={handleDelete}>
+				<ClearIcon fontSize="large" />
+			</IconButton>
 		</div>
 	);
 }

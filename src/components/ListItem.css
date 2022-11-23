@@ -47,3 +47,8 @@
 .Purchased {
 	background-color: #4e9f3d;
 }
+
+.ListItemContainer {
+	display: flex;
+	justify-content: space-between;
+}
