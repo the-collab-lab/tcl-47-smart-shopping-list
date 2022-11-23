@@ -31,16 +31,16 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 		<div className="ListItemContainer">
 			<li className="ListItem">
 				<form>
-					<Typography variant="h4">
-						<Checkbox
-							type="checkbox"
-							name="purchased"
-							id="purchased"
-							checked={isChecked}
-							onChange={handlePurchase}
-						/>
-						<label htmlFor="purchased">{name}</label>
-					</Typography>
+					<Checkbox
+						type="checkbox"
+						name="purchased"
+						id="purchased"
+						checked={isChecked}
+						onChange={handlePurchase}
+					/>
+					<label className="PurchasedItemName" htmlFor="purchased">
+						{name}
+					</label>
 				</form>
 			</li>
 			<IconButton onClick={handleDelete}>

@@ -9,7 +9,7 @@ export function ListItemGroup({ listItems, listToken, groupUrgency }) {
 			<Paper
 				sx={{
 					py: 2,
-					px: 5,
+					px: 2,
 					my: 1,
 					display: 'flex',
 					flexDirection: 'column',
@@ -18,10 +18,8 @@ export function ListItemGroup({ listItems, listToken, groupUrgency }) {
 				}}
 				elevation={3}
 			>
-				<Typography variant="h3">
-					<h3 className="Category">
-						{groupUrgency + ` (${listItems.length})`}
-					</h3>
+				<Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+					{groupUrgency + ` (${listItems.length})`}
 				</Typography>
 				{listItems &&
 					listItems.map((item, i) => (
