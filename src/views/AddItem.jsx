@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
-import { Alert, Typography } from '@mui/material';
+import { Alert } from '@mui/material';
 
 // sets number of days for each future purchase estimate variable
 export const numDaysInEstimate = {
