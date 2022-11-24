@@ -18,8 +18,7 @@ const initialState = { itemName: '', estimate: numDaysInEstimate.soon };
 export function AddItem({ data }) {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
-	const [message, setMessage] = useState(null);
-	const [severity, setSeverity] = useState(null);
+	const [alert, setAlert] = useState({ msg: null, severity: null });
 
 	// retrieves token from local storage, if one exists
 	const token = window.localStorage.getItem('tcl-shopping-list-token');
@@ -39,23 +38,35 @@ export function AddItem({ data }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (itemName === '') {
-			setMessage('Please enter the name of your item.');
-			setSeverity('warning');
+			createAlert('Please enter the name of your item.', 'warning');
 		} else if (
 			itemNames.includes(itemName.toLowerCase().replace(/[^a-z0-9]/gi, ''))
 		) {
-			setMessage(`You already have ${itemName} on your list!`);
-			setSeverity('warning');
+			createAlert(`You already have ${itemName} on your list!`, 'warning');
 		} else {
 			// changes string to number, as required by addItem function
 			const daysUntilNextPurchase = +estimate;
 			// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and numDaysInEstimate of next purchase date
 			addItem(token, { itemName, daysUntilNextPurchase });
-			setMessage(`You've added ${itemName} to your shopping list!`);
-			setSeverity('success');
+			createAlert(`You've added ${itemName} to your shopping list!`, 'success');
 			//Clear Form Data
 			setFormData(initialState);
 		}
+	};
+
+	const clearAlert = () => {
+		setAlert({
+			msg: null,
+			severity: null,
+		});
+	};
+	const createAlert = (msg, severity) => {
+		setAlert(() => ({
+			msg: msg,
+			severity: severity,
+		}));
+		//Clear alert after 5 seconds
+		setTimeout(clearAlert, 5000);
 	};
 
 	// displays a form with a text field for item name and 3 radio buttons for user to choose next purchase date numDaysInEstimate
@@ -64,12 +75,13 @@ export function AddItem({ data }) {
 			{!!token ? (
 				<div>
 					<h1>Add a New Item</h1>
-					{message ? (
+					{console.log('alert.msg', alert.msg)}
+					{alert.msg ? (
 						<Alert
-							severity={severity}
+							severity={alert.severity}
 							sx={{ display: 'flex', alignItems: 'center', fontSize: 'small' }}
 						>
-							{message}
+							{alert.msg}
 						</Alert>
 					) : null}
 					<form onSubmit={handleSubmit}>
