@@ -1,12 +1,11 @@
-import { Checkbox } from '@mui/material';
+import { Checkbox, IconButton } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 import './ListItem.css';
 import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 import { getDaysBetweenDates } from '../utils';
 
 export function ListItem({ name, item, listToken, urgencyCategory }) {
 	const { isChecked, id, dateLastPurchased } = item;
-
-	const urgencyClass = urgencyCategory.replace(/\s/g, '');
 
 	if (isChecked) {
 		// If item was purchased over 1 day ago, uncheck item
@@ -27,7 +26,7 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 	};
 
 	return (
-		<div>
+		<div className="ListItemContainer">
 			<li className="ListItem">
 				<form>
 					<Checkbox
@@ -37,11 +36,14 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 						checked={isChecked}
 						onChange={handlePurchase}
 					/>
-					<label htmlFor="purchased">{name}</label>
+					<label className="PurchasedItemName" htmlFor="purchased">
+						{name}
+					</label>
 				</form>
-				<p className={`${urgencyClass} Status`}>{urgencyCategory}</p>
 			</li>
-			<button onClick={handleDelete}>Delete Item</button>
+			<IconButton onClick={handleDelete}>
+				<ClearIcon fontSize="large" />
+			</IconButton>
 		</div>
 	);
 }
