@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from 'react-router-dom';
 
 import './Layout.css';
+import { Alert } from '@mui/material';
 
 /**
  * TODO: The links defined in this file don't work!
@@ -10,13 +11,21 @@ import './Layout.css';
  * defined in `App.jsx`.
  */
 
-export function Layout() {
+export function Layout({ alert }) {
 	return (
 		<>
 			<div className="Layout">
 				<header className="Layout-header">
 					<h1>Smart shopping list</h1>
 				</header>
+				{alert.msg ? (
+					<Alert
+						severity={alert.severity}
+						sx={{ display: 'flex', alignItems: 'center', fontSize: 'small' }}
+					>
+						{alert.msg}
+					</Alert>
+				) : null}
 				<main className="Layout-main">
 					<Outlet />
 				</main>

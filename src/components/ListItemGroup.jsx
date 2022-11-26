@@ -2,7 +2,12 @@ import React from 'react';
 import { ListItem } from './ListItem';
 import './ListItemGroup.css';
 
-export function ListItemGroup({ listItems, listToken, groupUrgency }) {
+export function ListItemGroup({
+	listItems,
+	listToken,
+	groupUrgency,
+	createAlert,
+}) {
 	return (
 		<ul>
 			<hr />
@@ -15,6 +20,7 @@ export function ListItemGroup({ listItems, listToken, groupUrgency }) {
 						item={item}
 						listToken={listToken}
 						urgencyCategory={groupUrgency}
+						createAlert={createAlert}
 					/>
 				))}
 		</ul>

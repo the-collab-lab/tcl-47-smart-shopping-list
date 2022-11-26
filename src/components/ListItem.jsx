@@ -3,7 +3,13 @@ import './ListItem.css';
 import { updateItem, unCheckItem, deleteItem } from '../api/firebase';
 import { getDaysBetweenDates } from '../utils';
 
-export function ListItem({ name, item, listToken, urgencyCategory }) {
+export function ListItem({
+	name,
+	item,
+	listToken,
+	urgencyCategory,
+	createAlert,
+}) {
 	const { isChecked, id, dateLastPurchased } = item;
 
 	const urgencyClass = urgencyCategory.replace(/\s/g, '');
@@ -23,6 +29,9 @@ export function ListItem({ name, item, listToken, urgencyCategory }) {
 	const handleDelete = () => {
 		if (window.confirm('Are you sure you want to delete item?')) {
 			deleteItem(listToken, id);
+			createAlert('List item successfully deleted', 'success');
+		} else {
+			createAlert('List item not deleted', 'warning');
 		}
 	};
 

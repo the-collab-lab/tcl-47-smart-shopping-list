@@ -5,7 +5,7 @@ import { ListItemGroup } from '../components/ListItemGroup';
 import { SearchBar } from '../components';
 import { urgencyCategory } from '../utils';
 
-export function List({ data, listToken }) {
+export function List({ data, listToken, createAlert }) {
 	const sortedData = comparePurchaseUrgency(data);
 	const [searchTerm, setSearchTerm] = useState('');
 
@@ -35,6 +35,7 @@ export function List({ data, listToken }) {
 								listItems={category}
 								listToken={listToken}
 								groupUrgency={urgencyCategory[i].label}
+								createAlert={createAlert}
 							/>
 						))
 					) : (

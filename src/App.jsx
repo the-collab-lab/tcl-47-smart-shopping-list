@@ -54,10 +54,29 @@ export function App() {
 		});
 	}, [listToken]);
 
+	//Create alert to be used throughout the app
+	const [alert, setAlert] = useState({ msg: null, severity: null });
+
+	const clearAlert = () => {
+		setAlert({
+			msg: null,
+			severity: null,
+		});
+	};
+
+	const createAlert = (msg, severity) => {
+		setAlert(() => ({
+			msg: msg,
+			severity: severity,
+		}));
+		//Clear alert after 5 seconds
+		setTimeout(clearAlert, 5000);
+	};
+
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={<Layout />}>
+				<Route path="/" element={<Layout alert={alert} />}>
 					<Route
 						index
 						element={
@@ -65,14 +84,24 @@ export function App() {
 								listToken={listToken}
 								createNewList={createNewList}
 								setListToken={setListToken}
+								createAlert={createAlert}
 							/>
 						}
 					/>
 					<Route
 						path="/list"
-						element={<List data={data} listToken={listToken} />}
+						element={
+							<List
+								data={data}
+								listToken={listToken}
+								createAlert={createAlert}
+							/>
+						}
 					/>
-					<Route path="/add-item" element={<AddItem data={data} />} />
+					<Route
+						path="/add-item"
+						element={<AddItem data={data} createAlert={createAlert} />}
+					/>
 				</Route>
 			</Routes>
 		</Router>

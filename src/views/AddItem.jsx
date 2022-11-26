@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
-import { Alert } from '@mui/material';
 
 // sets number of days for each future purchase estimate variable
 export const numDaysInEstimate = {
@@ -15,10 +14,9 @@ export const numDaysInEstimate = {
 // sets initial default values in form fields and deconstruct form field variables
 const initialState = { itemName: '', estimate: numDaysInEstimate.soon };
 
-export function AddItem({ data }) {
+export function AddItem({ data, createAlert }) {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
-	const [alert, setAlert] = useState({ msg: null, severity: null });
 
 	// retrieves token from local storage, if one exists
 	const token = window.localStorage.getItem('tcl-shopping-list-token');
@@ -54,36 +52,12 @@ export function AddItem({ data }) {
 		}
 	};
 
-	const clearAlert = () => {
-		setAlert({
-			msg: null,
-			severity: null,
-		});
-	};
-	const createAlert = (msg, severity) => {
-		setAlert(() => ({
-			msg: msg,
-			severity: severity,
-		}));
-		//Clear alert after 5 seconds
-		setTimeout(clearAlert, 5000);
-	};
-
 	// displays a form with a text field for item name and 3 radio buttons for user to choose next purchase date numDaysInEstimate
 	return (
 		<div>
 			{!!token ? (
 				<div>
 					<h1>Add a New Item</h1>
-					{console.log('alert.msg', alert.msg)}
-					{alert.msg ? (
-						<Alert
-							severity={alert.severity}
-							sx={{ display: 'flex', alignItems: 'center', fontSize: 'small' }}
-						>
-							{alert.msg}
-						</Alert>
-					) : null}
 					<form onSubmit={handleSubmit}>
 						<label htmlFor="itemName">Name:</label>
 						<input
