@@ -1,4 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import { Navbar } from '../components/Navbar';
 
 import './Layout.css';
 
@@ -15,7 +16,7 @@ export function Layout() {
 		<>
 			<div className="Layout">
 				<header className="Layout-header">
-					<h1>Smart shopping list</h1>
+					<Navbar />
 				</header>
 				<main className="Layout-main">
 					<Outlet />
