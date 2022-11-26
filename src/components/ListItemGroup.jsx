@@ -3,7 +3,12 @@ import { ListItem } from './ListItem';
 import './ListItemGroup.css';
 import { Paper, Typography } from '@mui/material';
 
-export function ListItemGroup({ listItems, listToken, groupUrgency }) {
+export function ListItemGroup({
+	listItems,
+	listToken,
+	groupUrgency,
+	createAlert,
+}) {
 	return (
 		<ul>
 			<Paper
@@ -29,6 +34,7 @@ export function ListItemGroup({ listItems, listToken, groupUrgency }) {
 							item={item}
 							listToken={listToken}
 							urgencyCategory={groupUrgency}
+							createAlert={createAlert}
 						/>
 					))}
 			</Paper>

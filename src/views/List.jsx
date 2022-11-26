@@ -10,7 +10,7 @@ import { AddButton } from '../components';
 import { comparePurchaseUrgency } from '../api/firebase';
 import { urgencyCategory } from '../utils';
 
-export function List({ data, listToken }) {
+export function List({ data, listToken, createAlert }) {
 	const sortedData = comparePurchaseUrgency(data);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [addItem, setAddItem] = useState(false);
@@ -28,7 +28,11 @@ export function List({ data, listToken }) {
 		<Box display="flex" flexDirection="column">
 			{!data.length ? (
 				addItem ? (
-					<AddItem data={data} setAddItem={setAddItem} />
+					<AddItem
+						data={data}
+						setAddItem={setAddItem}
+						createAlert={createAlert}
+					/>
 				) : (
 					<Paper
 						sx={{
@@ -76,6 +80,7 @@ export function List({ data, listToken }) {
 								listItems={category}
 								listToken={listToken}
 								groupUrgency={urgencyCategory[i].label}
+								createAlert={createAlert}
 							/>
 						))
 					) : (

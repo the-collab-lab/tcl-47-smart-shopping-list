@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import { verifyExistingList } from '../api/firebase';
 import { Button, TextField } from '@mui/material';
 
-export function Home({ createNewList, listToken, setListToken }) {
+export function Home({ createNewList, listToken, setListToken, createAlert }) {
 	const [token, setToken] = useState('');
 
 	const handleClick = useCallback(() => {
@@ -31,7 +31,8 @@ export function Home({ createNewList, listToken, setListToken }) {
 			setListToken(formattedToken);
 		} else {
 			//invalid token alert or error message
-			alert('This list does not exist.');
+			createAlert(`The list '${formattedToken}' does not exist.`, 'warning');
+			// alert('This list does not exist.');
 		}
 	};
 
