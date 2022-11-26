@@ -198,16 +198,16 @@ export function getItemUrgency(item) {
 			? getDaysBetweenDates(item.dateNextPurchased)
 			: getDaysBetweenDates(undefined, item.dateNextPurchased);
 		// If there are less than 0 days until purchase, the item is overdue
-		if (daysUntilPurchase < 0) {
+		if (daysUntilPurchase <= 0) {
 			return 0; // Overdue items
 			// If there are less than 7 days until purchase, the item is due soon
 		} else if (daysUntilPurchase <= 7) {
 			return 1; // Soon items
 			// If there are more than 7 but less than 30 days until purchase, the item is due kind of soon
-		} else if (daysUntilPurchase > 7 && daysUntilPurchase < 30) {
+		} else if (daysUntilPurchase > 7 && daysUntilPurchase <= 14) {
 			return 2; // Kind of Soon items
 			// If there are more than 30 days until purchase, the item is due not soon
-		} else if (daysUntilPurchase >= 30) {
+		} else if (daysUntilPurchase > 14 && daysSincePurchase < 60) {
 			return 3; // Not Soon items
 			// All items should be handled by above, but if not, mark item as inactive
 		} else {
