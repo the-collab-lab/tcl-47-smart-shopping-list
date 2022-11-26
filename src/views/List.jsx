@@ -55,7 +55,11 @@ export function List({ data, listToken, createAlert }) {
 			) : (
 				<div>
 					{addItem ? (
-						<AddItem data={data} setAddItem={setAddItem} />
+						<AddItem
+							data={data}
+							setAddItem={setAddItem}
+							createAlert={createAlert}
+						/>
 					) : (
 						<Box
 							sx={{

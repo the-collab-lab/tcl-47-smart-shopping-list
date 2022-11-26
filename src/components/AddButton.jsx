@@ -8,6 +8,7 @@ export function AddButton({ toggleAddItem }) {
 			size="small"
 			aria-label="Add Item Toggle"
 			onClick={toggleAddItem}
+			sx={{ zIndex: 1 }}
 		>
 			<Add fontSize="large" style={{ color: '#fff' }} />
 		</Fab>

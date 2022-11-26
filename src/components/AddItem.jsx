@@ -94,6 +94,7 @@ export function AddItem({ data, setAddItem, createAlert }) {
 								borderRadius: 5,
 								margin: 0,
 								marginBottom: 10,
+								padding: 20,
 							}}
 						>
 							<legend>How soon will you buy this again?</legend>
