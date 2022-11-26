@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { AddItem, Home, Layout, List } from './views';
+import { Home, Layout, List } from './views';
 
 import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
@@ -72,7 +72,6 @@ export function App() {
 						path="/list"
 						element={<List data={data} listToken={listToken} />}
 					/>
-					<Route path="/add-item" element={<AddItem data={data} />} />
 				</Route>
 			</Routes>
 		</Router>
