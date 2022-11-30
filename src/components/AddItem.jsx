@@ -3,6 +3,17 @@ import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
 import { Alert } from '@mui/material';
 
+import {
+	Button,
+	FormControl,
+	FormControlLabel,
+	Paper,
+	Radio,
+	RadioGroup,
+	TextField,
+	Typography,
+} from '@mui/material';
+
 // sets number of days for each future purchase estimate variable
 export const numDaysInEstimate = {
 	soon: '7',
@@ -15,7 +26,7 @@ export const numDaysInEstimate = {
 // sets initial default values in form fields and deconstruct form field variables
 const initialState = { itemName: '', estimate: numDaysInEstimate.soon };
 
-export function AddItem({ data }) {
+export function AddItem({ data, setAddItem }) {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
 	const [message, setMessage] = useState(null);
@@ -58,9 +69,14 @@ export function AddItem({ data }) {
 		}
 	};
 
+	const onCancel = () => {
+		setFormData(initialState);
+		setAddItem(false);
+	};
+
 	// displays a form with a text field for item name and 3 radio buttons for user to choose next purchase date numDaysInEstimate
 	return (
-		<div>
+		<Paper sx={{ py: 2, px: 5 }} elevation={3}>
 			{!!token ? (
 				<div>
 					<h1>Add a New Item</h1>
@@ -73,48 +89,58 @@ export function AddItem({ data }) {
 						</Alert>
 					) : null}
 					<form onSubmit={handleSubmit}>
-						<label htmlFor="itemName">Name:</label>
-						<input
+						<TextField
+							label="Item Name"
 							type="text"
 							name="itemName"
 							id="itemName"
 							value={itemName}
 							onChange={formHandler}
+							fullWidth
+							sx={{ mb: 2 }}
 						/>
 
-						<fieldset>
+						<fieldset
+							style={{
+								border: '1px solid #ccc',
+								borderRadius: 5,
+								margin: 0,
+								marginBottom: 10,
+							}}
+						>
 							<legend>How soon will you buy this again?</legend>
 							<label htmlFor="estimate">
-								<input
-									type="radio"
-									value={numDaysInEstimate.soon}
-									id="soon"
-									name="estimate"
-									onChange={formHandler}
-									checked={estimate === numDaysInEstimate.soon}
-								/>
-								<label htmlFor="soon">Soon</label>
-								<input
-									type="radio"
-									value={numDaysInEstimate.kindOfSoon}
-									id="kindOfSoon"
-									name="estimate"
-									onChange={formHandler}
-									checked={estimate === numDaysInEstimate.kindOfSoon}
-								/>
-								<label htmlFor="kindOfSoon">Kind of Soon</label>
-								<input
-									type="radio"
-									value={numDaysInEstimate.notSoon}
-									id="notSoon"
-									name="estimate"
-									onChange={formHandler}
-									checked={estimate === numDaysInEstimate.notSoon}
-								/>
-								<label htmlFor="notSoon">Not Soon</label>
+								<FormControl>
+									<RadioGroup
+										name="estimate"
+										value={estimate}
+										onChange={formHandler}
+									>
+										<FormControlLabel
+											value={numDaysInEstimate.soon}
+											control={<Radio />}
+											label="Soon"
+										/>
+										<FormControlLabel
+											value={numDaysInEstimate.kindOfSoon}
+											control={<Radio />}
+											label="Kind of Soon"
+										/>
+										<FormControlLabel
+											value={numDaysInEstimate.notSoon}
+											control={<Radio />}
+											label="Not Soon"
+										/>
+									</RadioGroup>
+								</FormControl>
 							</label>
 						</fieldset>
-						<button>Add Item</button>
+						<Button variant="contained" onClick={handleSubmit} type="submit">
+							Add Item
+						</Button>
+						<Button variant="outlined" onClick={onCancel} type="reset">
+							Close
+						</Button>
 					</form>
 				</div>
 			) : (
@@ -125,10 +151,10 @@ export function AddItem({ data }) {
 						list!
 					</p>
 					<NavLink to="/">
-						<button>Take me there!</button>
+						<Button variant="contained">Take me there!</Button>
 					</NavLink>
 				</div>
 			)}
-		</div>
+		</Paper>
 	);
 }
