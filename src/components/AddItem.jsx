@@ -79,7 +79,9 @@ export function AddItem({ data, setAddItem }) {
 		<Paper sx={{ py: 2, px: 5 }} elevation={3}>
 			{!!token ? (
 				<div>
-					<h1>Add a New Item</h1>
+					<Typography variant="h3" sx={{ mb: 2 }}>
+						Add New Item
+					</Typography>
 					{message ? (
 						<Alert
 							severity={severity}
