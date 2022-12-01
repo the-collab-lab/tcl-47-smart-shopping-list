@@ -1,6 +1,18 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
+import { Alert } from '@mui/material';
+
+import {
+	Button,
+	FormControl,
+	FormControlLabel,
+	Paper,
+	Radio,
+	RadioGroup,
+	TextField,
+	Typography,
+} from '@mui/material';
 
 // sets number of days for each future purchase estimate variable
 export const numDaysInEstimate = {
@@ -14,10 +26,11 @@ export const numDaysInEstimate = {
 // sets initial default values in form fields and deconstruct form field variables
 const initialState = { itemName: '', estimate: numDaysInEstimate.soon };
 
-export function AddItem({ data }) {
+export function AddItem({ data, setAddItem }) {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
 	const [message, setMessage] = useState(null);
+	const [severity, setSeverity] = useState(null);
 
 	// retrieves token from local storage, if one exists
 	const token = window.localStorage.getItem('tcl-shopping-list-token');
@@ -37,72 +50,99 @@ export function AddItem({ data }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (itemName === '') {
-			setMessage('Please enter the name of your item');
+			setMessage('Please enter the name of your item.');
+			setSeverity('warning');
 		} else if (
 			itemNames.includes(itemName.toLowerCase().replace(/[^a-z0-9]/gi, ''))
 		) {
-			setMessage(`You already have ${itemName} on your list`);
+			setMessage(`You already have ${itemName} on your list!`);
+			setSeverity('warning');
 		} else {
 			// changes string to number, as required by addItem function
 			const daysUntilNextPurchase = +estimate;
 			// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and numDaysInEstimate of next purchase date
 			addItem(token, { itemName, daysUntilNextPurchase });
 			setMessage(`You've added ${itemName} to your shopping list!`);
+			setSeverity('success');
 			//Clear Form Data
 			setFormData(initialState);
 		}
 	};
 
+	const onCancel = () => {
+		setFormData(initialState);
+		setAddItem(false);
+	};
+
 	// displays a form with a text field for item name and 3 radio buttons for user to choose next purchase date numDaysInEstimate
 	return (
-		<div>
+		<Paper sx={{ py: 2, px: 5 }} elevation={3}>
 			{!!token ? (
 				<div>
-					<h1>Add a New Item</h1>
-					{message ? <p style={{ color: 'red' }}>{message}</p> : null}
+					<Typography variant="h3" sx={{ mb: 2 }}>
+						Add New Item
+					</Typography>
+					{message ? (
+						<Alert
+							severity={severity}
+							sx={{ display: 'flex', alignItems: 'center', fontSize: 'small' }}
+						>
+							{message}
+						</Alert>
+					) : null}
 					<form onSubmit={handleSubmit}>
-						<label htmlFor="itemName">Name:</label>
-						<input
+						<TextField
+							label="Item Name"
 							type="text"
 							name="itemName"
 							id="itemName"
 							value={itemName}
 							onChange={formHandler}
+							fullWidth
+							sx={{ mb: 2 }}
 						/>
 
-						<fieldset>
+						<fieldset
+							style={{
+								border: '1px solid #ccc',
+								borderRadius: 5,
+								margin: 0,
+								marginBottom: 10,
+							}}
+						>
 							<legend>How soon will you buy this again?</legend>
 							<label htmlFor="estimate">
-								<input
-									type="radio"
-									value={numDaysInEstimate.soon}
-									id="soon"
-									name="estimate"
-									onChange={formHandler}
-									checked={estimate === numDaysInEstimate.soon}
-								/>
-								<label htmlFor="soon">Soon</label>
-								<input
-									type="radio"
-									value={numDaysInEstimate.kindOfSoon}
-									id="kindOfSoon"
-									name="estimate"
-									onChange={formHandler}
-									checked={estimate === numDaysInEstimate.kindOfSoon}
-								/>
-								<label htmlFor="kindOfSoon">Kind of Soon</label>
-								<input
-									type="radio"
-									value={numDaysInEstimate.notSoon}
-									id="notSoon"
-									name="estimate"
-									onChange={formHandler}
-									checked={estimate === numDaysInEstimate.notSoon}
-								/>
-								<label htmlFor="notSoon">Not Soon</label>
+								<FormControl>
+									<RadioGroup
+										name="estimate"
+										value={estimate}
+										onChange={formHandler}
+									>
+										<FormControlLabel
+											value={numDaysInEstimate.soon}
+											control={<Radio />}
+											label="Soon"
+										/>
+										<FormControlLabel
+											value={numDaysInEstimate.kindOfSoon}
+											control={<Radio />}
+											label="Kind of Soon"
+										/>
+										<FormControlLabel
+											value={numDaysInEstimate.notSoon}
+											control={<Radio />}
+											label="Not Soon"
+										/>
+									</RadioGroup>
+								</FormControl>
 							</label>
 						</fieldset>
-						<button>Add Item</button>
+						<Button variant="contained" onClick={handleSubmit} type="submit">
+							Add Item
+						</Button>
+						<Button variant="outlined" onClick={onCancel} type="reset">
+							Close
+						</Button>
 					</form>
 				</div>
 			) : (
@@ -113,10 +153,10 @@ export function AddItem({ data }) {
 						list!
 					</p>
 					<NavLink to="/">
-						<button>Take me there!</button>
+						<Button variant="contained">Take me there!</Button>
 					</NavLink>
 				</div>
 			)}
-		</div>
+		</Paper>
 	);
 }
