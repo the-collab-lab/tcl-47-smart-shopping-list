@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { addItem } from '../api/firebase';
+import { Alert } from '@mui/material';
 
 import {
 	Button,
@@ -29,6 +30,7 @@ export function AddItem({ data, setAddItem }) {
 	const [formData, setFormData] = useState(initialState);
 	const { itemName, estimate } = formData;
 	const [message, setMessage] = useState(null);
+	const [severity, setSeverity] = useState(null);
 
 	// retrieves token from local storage, if one exists
 	const token = window.localStorage.getItem('tcl-shopping-list-token');
@@ -48,17 +50,20 @@ export function AddItem({ data, setAddItem }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (itemName === '') {
-			setMessage('Please enter the name of your item');
+			setMessage('Please enter the name of your item.');
+			setSeverity('warning');
 		} else if (
 			itemNames.includes(itemName.toLowerCase().replace(/[^a-z0-9]/gi, ''))
 		) {
-			setMessage(`You already have ${itemName} on your list`);
+			setMessage(`You already have ${itemName} on your list!`);
+			setSeverity('warning');
 		} else {
 			// changes string to number, as required by addItem function
 			const daysUntilNextPurchase = +estimate;
 			// uses addItem function imported from api; this takes 2 arguments: the user's token and the item object containing item name and numDaysInEstimate of next purchase date
 			addItem(token, { itemName, daysUntilNextPurchase });
 			setMessage(`You've added ${itemName} to your shopping list!`);
+			setSeverity('success');
 			//Clear Form Data
 			setFormData(initialState);
 		}
@@ -77,7 +82,14 @@ export function AddItem({ data, setAddItem }) {
 					<Typography variant="h3" sx={{ mb: 2 }}>
 						Add New Item
 					</Typography>
-					{message ? <p style={{ color: 'red' }}>{message}</p> : null}
+					{message ? (
+						<Alert
+							severity={severity}
+							sx={{ display: 'flex', alignItems: 'center', fontSize: 'small' }}
+						>
+							{message}
+						</Alert>
+					) : null}
 					<form onSubmit={handleSubmit}>
 						<TextField
 							label="Item Name"
