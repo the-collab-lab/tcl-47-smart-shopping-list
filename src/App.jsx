@@ -6,8 +6,6 @@ import { Home, Layout, List } from './views';
 import { getItemData, streamListItems } from './api';
 import { useStateWithStorage } from './utils';
 
-import { generateToken } from '@the-collab-lab/shopping-list-utils';
-
 export function App() {
 	const [data, setData] = useState([]);
 	/**
@@ -26,9 +24,10 @@ export function App() {
 	);
 
 	const createNewList = useCallback(() => {
-		const newToken = generateToken();
-		setListToken(newToken);
-	}, [setListToken]);
+		// const newToken = generateToken();
+		// setListToken(newToken);
+		console.log('Creating new lists is no longer supported');
+	}, []);
 
 	useEffect(() => {
 		if (!listToken) return;

@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 import { useCallback, useState } from 'react';
 import { verifyExistingList } from '../api/firebase';
 import { Button, TextField, Typography, Paper } from '@mui/material';
+import { ArchivalNoticeModal } from '@the-collab-lab/shopping-list-utils';
 
 export function Home({ createNewList, listToken, setListToken }) {
 	const [token, setToken] = useState('');
@@ -105,6 +106,7 @@ export function Home({ createNewList, listToken, setListToken }) {
 			<div className="homeImages">
 				<img src={HomeIMG} alt="honeydew" id="homeImg" />
 			</div>
+			<ArchivalNoticeModal />
 		</div>
 	);
 }
